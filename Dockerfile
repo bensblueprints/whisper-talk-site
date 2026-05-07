@@ -11,9 +11,7 @@ RUN npm ci --no-audit --no-fund --include=dev
 FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Tailwind/Next build stage must NOT have NODE_ENV=production set, or PostCSS resolves devDeps from the wrong tree.
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV NODE_ENV=development
 RUN npm run build
 
 FROM base AS runner
