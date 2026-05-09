@@ -23,9 +23,9 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'WisperTalk — Voice dictation for Windows. Pay once.',
+  title: 'WisperTalk — Voice dictation for Windows & Mac. Pay once.',
   description:
-    'A precise, fast, lifetime-licensed voice-to-text app for Windows. Hold a key, speak, release — clean text appears wherever your cursor is. $49, one device at a time.',
+    'A precise, fast, lifetime-licensed voice-to-text app for Windows and macOS. Hold a key, speak, release — clean text appears wherever your cursor is. $49, one device at a time.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://wispertalk.com'),
   openGraph: {
     title: 'WisperTalk — Voice dictation for Windows & Mac.',
