@@ -2,6 +2,7 @@ import { Nav } from '@/components/Nav';
 import { Waveform } from '@/components/Waveform';
 import { LicenseReveal } from '@/components/LicenseReveal';
 import { BuyButton } from '@/components/BuyButton';
+import { PlatformSwitcher } from '@/components/PlatformSwitcher';
 import { Marquee } from '@/components/Marquee';
 import { HowItWorks } from '@/components/HowItWorks';
 import { Comparison } from '@/components/Comparison';
@@ -50,7 +51,7 @@ function Hero() {
             <div className="flex items-center gap-3 mb-8 rise" style={{ animationDelay: '60ms' }}>
               <span className="block w-2 h-2 rounded-full bg-ember pulse-ember" />
               <span className="font-mono text-[11px] uppercase-track text-paper-mute">
-                01 / Voice dictation · Windows · v0.1
+                01 / Voice dictation · Windows + Mac · v0.2
               </span>
             </div>
 
@@ -60,9 +61,7 @@ function Hero() {
             >
               Type with <em className="text-ember">your</em>
               <br />
-              voice. <span className="text-paper-mute">On Windows.</span>
-              <br />
-              <span className="cursor"></span>
+              voice. <PlatformSwitcher />
             </h1>
 
             <p
@@ -93,8 +92,8 @@ function Hero() {
               style={{ animationDelay: '640ms' }}
             >
               <Chip label="Windows 10/11" />
-              <Chip label="x64" />
-              <Chip label="80 MB" />
+              <Chip label="macOS 11+" />
+              <Chip label="Apple Silicon + Intel" />
               <Chip label="<300ms" />
               <Chip label="Groq · Ollama" />
             </div>
