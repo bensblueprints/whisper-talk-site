@@ -9,3 +9,5 @@ out/
 .vercel
 next-env.d.ts
 drizzle/meta
+.deploy/
+tsconfig.tsbuildinfo

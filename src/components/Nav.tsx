@@ -6,7 +6,7 @@ export function Nav() {
       <div className="mx-auto max-w-[1280px] flex items-center justify-between">
         <Link href="/" className="flex items-baseline gap-2 group">
           <span className="font-display text-[28px] leading-none tracking-tight">
-            <em className="text-ember">Whisper</em> Talk
+            <em className="text-ember">Wisper</em>Talk
           </span>
           <span className="hidden sm:inline-block font-mono text-[10px] uppercase-track text-paper-faint">
             v0.1

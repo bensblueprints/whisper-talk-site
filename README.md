@@ -1,6 +1,6 @@
-# Whisper Talk — license storefront
+# WisperTalk — license storefront
 
-Next.js 15 site at **whisper.advancedmarketing.co**. Sells Whisper Talk lifetime licenses via Stripe, issues keys, enforces one-device-at-a-time, and ships an admin dashboard for sales tracking.
+Next.js 15 site at **wispertalk.com**. Sells WisperTalk lifetime licenses via Stripe, issues keys, enforces one-device-at-a-time, and ships an admin dashboard for sales tracking.
 
 ## Stack
 
@@ -31,20 +31,20 @@ stripe listen --forward-to localhost:3001/api/webhook
 
 The site runs on the Coolify host at `212.28.184.24` (Contabo VPS 2).
 
-1. **Cloudflare DNS** — Add an A record `whisper.advancedmarketing.co → 212.28.184.24`, proxied (orange cloud).
+1. **Cloudflare DNS** — Add an A record `wispertalk.com → 212.28.184.24`, proxied (orange cloud).
 2. **Postgres** — In Coolify, "+ New Resource → Postgres". Note the connection string.
-3. **App project** — "+ New Resource → Application → Public Repository". Use `https://github.com/bensblueprints/whisper-talk-site`. Build pack: **Dockerfile**. Port: **3001**. Domain: `whisper.advancedmarketing.co` with HTTPS.
+3. **App project** — "+ New Resource → Application → Public Repository". Use `https://github.com/bensblueprints/whisper-talk-site`. Build pack: **Dockerfile**. Port: **3001**. Domain: `wispertalk.com` with HTTPS.
 4. **Environment variables** in the Coolify app:
    - `DATABASE_URL` — from step 2
    - `STRIPE_SECRET_KEY`, `STRIPE_PUBLISHABLE_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID`
    - `RESEND_API_KEY`, `EMAIL_FROM`
    - `LICENSE_JWT_SECRET` — `openssl rand -base64 48`
    - `ADMIN_PASSWORD`, `ADMIN_COOKIE_SECRET`
-   - `NEXT_PUBLIC_SITE_URL=https://whisper.advancedmarketing.co`
+   - `NEXT_PUBLIC_SITE_URL=https://wispertalk.com`
    - `NEXT_PUBLIC_DOWNLOAD_URL=https://github.com/bensblueprints/whisper-talk/releases/latest`
 5. **Deploy** — first build takes ~3 min.
 6. **Run migrations** — once the app is up, run `npm run db:migrate` from a Coolify exec terminal, or temporarily uncomment a one-shot init command.
-7. **Stripe webhook** — in the Stripe dashboard, add endpoint `https://whisper.advancedmarketing.co/api/webhook` for events `checkout.session.completed` and `charge.refunded`. Copy the signing secret into Coolify env and redeploy.
+7. **Stripe webhook** — in the Stripe dashboard, add endpoint `https://wispertalk.com/api/webhook` for events `checkout.session.completed` and `charge.refunded`. Copy the signing secret into Coolify env and redeploy.
 
 ## License flow
 

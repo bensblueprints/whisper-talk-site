@@ -7,7 +7,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
           <div className="md:col-span-5">
             <div className="font-display text-3xl mb-3">
-              <em className="text-ember">Whisper</em> Talk
+              <em className="text-ember">Wisper</em>Talk
             </div>
             <p className="text-paper-mute text-[14px] leading-relaxed max-w-sm">
               A small, fast voice-dictation tool for people who type for a living and refuse to pay rent on it.

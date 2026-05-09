@@ -1,7 +1,7 @@
 import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 
-export const metadata = { title: 'Download — Whisper Talk' };
+export const metadata = { title: 'Download — WisperTalk' };
 
 export default function DownloadPage() {
   const downloadBase = process.env.NEXT_PUBLIC_DOWNLOAD_URL || 'https://github.com/bensblueprints/whisper-talk/releases/latest';
@@ -17,7 +17,7 @@ export default function DownloadPage() {
           </div>
 
           <h1 className="font-display text-5xl sm:text-7xl leading-[0.95] tracking-tight text-balance mb-6">
-            <em className="text-ember">Whisper Talk</em><br />for Windows.
+            <em className="text-ember">WisperTalk</em><br />for Windows.
           </h1>
 
           <p className="text-paper-mute text-[15.5px] leading-relaxed max-w-xl mb-12">
@@ -35,7 +35,7 @@ export default function DownloadPage() {
                 Standard NSIS installer. Adds Start Menu + Desktop shortcuts. Includes auto-update channel.
               </p>
               <div className="font-mono text-[11px] uppercase-track text-paper-mute group-hover:text-ember-soft transition-colors">
-                Whisper Talk Setup.exe →
+                WisperTalk Setup.exe →
               </div>
             </a>
 
@@ -49,7 +49,7 @@ export default function DownloadPage() {
                 Single-file .exe — runs from a USB stick or any folder. No install, no registry changes.
               </p>
               <div className="font-mono text-[11px] uppercase-track text-paper-mute group-hover:text-paper transition-colors">
-                Whisper-Talk-portable.exe →
+                WisperTalk-portable.exe →
               </div>
             </a>
           </div>

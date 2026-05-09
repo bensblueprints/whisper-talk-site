@@ -8,14 +8,18 @@ import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 
-async function fetchLicense(sessionId: string, attempts = 8): Promise<{ key: string; email: string } | null> {
+async function fetchLicenses(
+  sessionId: string,
+  attempts = 8
+): Promise<{ keys: string[]; email: string } | null> {
   for (let i = 0; i < attempts; i++) {
     const rows = await db
       .select()
       .from(schema.licenses)
-      .where(eq(schema.licenses.stripeSessionId, sessionId))
-      .limit(1);
-    if (rows.length > 0) return { key: rows[0].key, email: rows[0].email };
+      .where(eq(schema.licenses.stripeSessionId, sessionId));
+    if (rows.length > 0) {
+      return { keys: rows.map((r) => r.key), email: rows[0].email };
+    }
     await new Promise((r) => setTimeout(r, 750));
   }
   return null;
@@ -38,13 +42,13 @@ export default async function SuccessPage({
     );
   }
 
-  let lic = await fetchLicense(sessionId);
+  let lic = await fetchLicenses(sessionId);
 
   if (!lic && stripe) {
     try {
       const session = await stripe.checkout.sessions.retrieve(sessionId);
       if (session.payment_status === 'paid') {
-        lic = await fetchLicense(sessionId, 4);
+        lic = await fetchLicenses(sessionId, 4);
       }
     } catch {}
   }
@@ -64,16 +68,18 @@ export default async function SuccessPage({
           </div>
 
           <h1 className="font-display text-5xl sm:text-7xl leading-[0.95] tracking-tight text-balance mb-6">
-            <em className="text-ember">Welcome.</em><br /> Here is your license.
+            <em className="text-ember">Welcome.</em><br />
+            {lic && lic.keys.length > 1 ? 'Here are your licenses.' : 'Here is your license.'}
           </h1>
 
           <p className="text-paper-mute text-[15.5px] leading-relaxed max-w-xl mb-12">
-            We've also emailed it to <span className="font-mono text-paper">{lic?.email ?? 'your inbox'}</span>.
-            Save the key somewhere safe — it's the only thing that proves the license is yours.
+            {lic && lic.keys.length > 1 ? "We've also emailed them" : "We've also emailed it"} to{' '}
+            <span className="font-mono text-paper">{lic?.email ?? 'your inbox'}</span>.
+            Save {lic && lic.keys.length > 1 ? 'these keys' : 'the key'} somewhere safe — they're the only thing that proves the {lic && lic.keys.length > 1 ? 'licenses are' : 'license is'} yours.
           </p>
 
           {lic ? (
-            <CopyKey licenseKey={lic.key} email={lic.email} />
+            <CopyKey licenseKeys={lic.keys} email={lic.email} />
           ) : (
             <div className="rounded-lg border border-paper-trace bg-ink-2 p-8">
               <div className="font-mono text-[11px] uppercase-track text-paper-faint mb-3">
@@ -94,7 +100,7 @@ export default async function SuccessPage({
               className="rounded-lg border border-ember/40 bg-ember/5 hover:bg-ember/10 p-6 transition-colors group"
             >
               <div className="font-mono text-[11px] uppercase-track text-ember mb-2">Step 1</div>
-              <div className="font-display text-2xl mb-1">Download Whisper Talk →</div>
+              <div className="font-display text-2xl mb-1">Download WisperTalk →</div>
               <div className="text-paper-mute text-[13px]">Latest .exe for Windows 10/11</div>
             </a>
             <Link

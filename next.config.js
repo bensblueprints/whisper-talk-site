@@ -7,7 +7,7 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   experimental: {
-    serverActions: { allowedOrigins: ['whisper.advancedmarketing.co', 'localhost:3001'] }
+    serverActions: { allowedOrigins: ['wispertalk.com', 'www.wispertalk.com', 'localhost:3001'] }
   },
   async headers() {
     return [

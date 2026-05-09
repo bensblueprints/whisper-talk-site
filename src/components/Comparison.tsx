@@ -24,7 +24,7 @@ const competitors = [
     highlight: false
   },
   {
-    name: 'Whisper Talk',
+    name: 'WisperTalk',
     price: '$49',
     period: 'once',
     note: 'Windows native · pay once · own it',
@@ -47,7 +47,7 @@ export function Comparison() {
           The math is <em className="text-ember">not</em> subtle.
         </h2>
         <p className="text-paper-mute max-w-xl text-[15px] leading-relaxed mb-16">
-          Five months on any of those subscriptions costs more than a <em className="not-italic text-paper">lifetime</em> of Whisper Talk. Here's what the rest of the market looks like:
+          Five months on any of those subscriptions costs more than a <em className="not-italic text-paper">lifetime</em> of WisperTalk. Here's what the rest of the market looks like:
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
@@ -102,7 +102,7 @@ export function Comparison() {
         </div>
 
         <p className="text-paper-faint text-[12px] mt-8 max-w-xl leading-relaxed">
-          Pricing as of May 2026, public marketing pages of each competitor. Whisper Talk is independent and not affiliated with any of them.
+          Pricing as of May 2026, public marketing pages of each competitor. WisperTalk is independent and not affiliated with any of them.
         </p>
       </div>
     </section>

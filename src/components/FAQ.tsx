@@ -5,7 +5,7 @@ import { useState } from 'react';
 const items = [
   {
     q: 'How does "one device at a time" work?',
-    a: 'When you enter your key on a new computer, Whisper Talk asks the license server to bind that machine. If a different machine is already bound, the app shows you the bound device and lets you move the license — the old machine is deactivated immediately. There is no per-seat upsell; you can move as often as you like.'
+    a: 'When you enter your key on a new computer, WisperTalk asks the license server to bind that machine. If a different machine is already bound, the app shows you the bound device and lets you move the license — the old machine is deactivated immediately. There is no per-seat upsell; you can move as often as you like.'
   },
   {
     q: 'Does it work offline?',
@@ -17,7 +17,7 @@ const items = [
   },
   {
     q: 'What about my data?',
-    a: 'Audio goes directly from the app to Groq (or your local Ollama). The Whisper Talk license server only sees your email, payment confirmation, and a hashed device fingerprint. No audio, no transcripts, no usage data ever touches our servers.'
+    a: 'Audio goes directly from the app to Groq (or your local Ollama). The WisperTalk license server only sees your email, payment confirmation, and a hashed device fingerprint. No audio, no transcripts, no usage data ever touches our servers.'
   },
   {
     q: 'Can I get a refund?',

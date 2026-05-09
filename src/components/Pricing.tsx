@@ -1,4 +1,4 @@
-import { BuyButton } from './BuyButton';
+import { PricingBuy } from './PricingBuy';
 
 const includes = [
   ['lifetime updates', 'every release, free, forever'],
@@ -27,7 +27,7 @@ export function Pricing() {
               No trial that expires, no subscription that creeps up, no seat math. One key, one device at a time, every update included.
             </p>
 
-            <BuyButton />
+            <PricingBuy />
 
             <p className="font-mono text-[11px] text-paper-faint mt-4 max-w-md leading-relaxed">
               Stripe checkout · 30-day refund · license sent to your email immediately

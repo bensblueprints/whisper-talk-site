@@ -15,6 +15,12 @@ export function priceId(): string {
   return id;
 }
 
+export function additionalPriceId(): string | null {
+  return process.env.STRIPE_ADDITIONAL_PRICE_ID || null;
+}
+
+export const MAX_EXTRA_LICENSES = 20;
+
 export function webhookSecret(): string {
   const s = process.env.STRIPE_WEBHOOK_SECRET;
   if (!s) throw new Error('STRIPE_WEBHOOK_SECRET is not set');

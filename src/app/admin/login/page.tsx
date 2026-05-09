@@ -2,7 +2,7 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { LoginForm } from './login-form';
 
-export const metadata = { title: 'Admin sign in — Whisper Talk' };
+export const metadata = { title: 'Admin sign in — WisperTalk' };
 
 export default function AdminLoginPage() {
   return (

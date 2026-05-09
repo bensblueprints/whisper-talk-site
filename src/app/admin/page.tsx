@@ -7,7 +7,7 @@ import { Footer } from '@/components/Footer';
 import { LogoutButton } from './logout-button';
 
 export const dynamic = 'force-dynamic';
-export const metadata = { title: 'Admin — Whisper Talk' };
+export const metadata = { title: 'Admin — WisperTalk' };
 
 export default async function AdminPage() {
   const ok = await isAdmin();

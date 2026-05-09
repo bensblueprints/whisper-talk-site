@@ -2,7 +2,7 @@ import { Nav } from '@/components/Nav';
 import { Footer } from '@/components/Footer';
 import { AccountForm } from './account-form';
 
-export const metadata = { title: 'Manage your license — Whisper Talk' };
+export const metadata = { title: 'Manage your license — WisperTalk' };
 
 export default function AccountPage() {
   return (
