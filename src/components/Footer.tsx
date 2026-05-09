@@ -27,9 +27,9 @@ export function Footer() {
           <div className="md:col-span-2">
             <div className="font-mono text-[10px] uppercase-track text-paper-faint mb-4">Source</div>
             <ul className="space-y-2.5 text-[13px] text-paper-mute">
-              <li><a href="https://github.com/bensblueprints/whisper-talk" target="_blank" rel="noopener" className="hover:text-paper transition-colors">GitHub repo</a></li>
-              <li><a href="https://github.com/bensblueprints/whisper-talk/releases/latest" target="_blank" rel="noopener" className="hover:text-paper transition-colors">Releases</a></li>
-              <li><a href="https://github.com/zachlatta/freeflow" target="_blank" rel="noopener" className="hover:text-paper transition-colors">FreeFlow (mac)</a></li>
+              <li><a href="https://github.com/bensblueprints/wispertalk-releases" target="_blank" rel="noopener" className="hover:text-paper transition-colors">Releases (public)</a></li>
+              <li><a href="https://github.com/bensblueprints/wispertalk-releases/releases/latest" target="_blank" rel="noopener" className="hover:text-paper transition-colors">Latest version</a></li>
+              <li><a href="https://github.com/zachlatta/freeflow" target="_blank" rel="noopener" className="hover:text-paper transition-colors">Origin: FreeFlow (mac)</a></li>
             </ul>
           </div>
 

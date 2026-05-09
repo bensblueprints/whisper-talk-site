@@ -109,7 +109,7 @@ async function handleCompleted(session: Stripe.Checkout.Session) {
 
   const downloadUrl =
     process.env.NEXT_PUBLIC_DOWNLOAD_URL ||
-    'https://github.com/bensblueprints/whisper-talk/releases/latest';
+    'https://github.com/bensblueprints/wispertalk-releases/releases/latest';
   const totalCents = unitAmounts.reduce((a, b) => a + b, 0);
   try {
     await sendLicenseEmail({

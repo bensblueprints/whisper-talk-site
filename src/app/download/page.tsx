@@ -4,7 +4,7 @@ import { Footer } from '@/components/Footer';
 export const metadata = { title: 'Download — WisperTalk' };
 
 export default function DownloadPage() {
-  const downloadBase = process.env.NEXT_PUBLIC_DOWNLOAD_URL || 'https://github.com/bensblueprints/whisper-talk/releases/latest';
+  const downloadBase = process.env.NEXT_PUBLIC_DOWNLOAD_URL || 'https://github.com/bensblueprints/wispertalk-releases/releases/latest';
 
   return (
     <main className="min-h-screen grain">
