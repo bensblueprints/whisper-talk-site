@@ -28,9 +28,10 @@ export const metadata: Metadata = {
     'A precise, fast, lifetime-licensed voice-to-text app for Windows. Hold a key, speak, release — clean text appears wherever your cursor is. $49, one device at a time.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://wispertalk.com'),
   openGraph: {
-    title: 'WisperTalk — Voice dictation for Windows.',
+    title: 'WisperTalk — Voice dictation for Windows & Mac.',
     description: 'Hold a key, speak, release. $49 lifetime. One device at a time.',
-    type: 'website'
+    type: 'website',
+    images: [{ url: '/og-icon.png', width: 256, height: 256, alt: 'WisperTalk' }]
   }
 };
 

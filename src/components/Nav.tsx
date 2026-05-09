@@ -4,10 +4,14 @@ export function Nav() {
   return (
     <header className="relative z-30 px-6 lg:px-10 pt-6 pb-3">
       <div className="mx-auto max-w-[1280px] flex items-center justify-between">
-        <Link href="/" className="flex items-baseline gap-2 group">
-          <span className="font-display text-[28px] leading-none tracking-tight">
-            <em className="text-ember">Wisper</em>Talk
-          </span>
+        <Link href="/" className="flex items-center gap-3 group" aria-label="WisperTalk home">
+          <img
+            src="/logo.png"
+            alt="WisperTalk"
+            width={2018}
+            height={587}
+            className="h-9 sm:h-10 w-auto"
+          />
           <span className="hidden sm:inline-block font-mono text-[10px] uppercase-track text-paper-faint">
             v0.1
           </span>
