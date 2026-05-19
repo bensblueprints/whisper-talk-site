@@ -11,6 +11,7 @@ interface LicenseEmailProps {
   downloadUrl: string;
   amountCents: number;
   currency: string;
+  source?: 'stripe' | 'appsumo';
 }
 
 export async function sendLicenseEmail({
@@ -18,7 +19,8 @@ export async function sendLicenseEmail({
   licenseKeys,
   downloadUrl,
   amountCents,
-  currency
+  currency,
+  source = 'stripe'
 }: LicenseEmailProps) {
   if (!resend) {
     console.warn('Resend not configured — skipping email. Would have sent:', { to, licenseKeys });
@@ -42,12 +44,19 @@ export async function sendLicenseEmail({
     )
     .join('');
 
+  const isAppSumo = source === 'appsumo';
   const headline = isMulti
     ? `Your ${licenseKeys.length} WisperTalk licenses.`
-    : `Welcome to</em> WisperTalk.`;
-  const intro = isMulti
-    ? `Thanks for buying. Your <strong>${licenseKeys.length}</strong> license keys are below — keep this email; it's the only place we'll send them. Each key activates one device.`
-    : `Thanks for buying. Your license is below — keep this email; it's the only place we'll send it.`;
+    : isAppSumo
+      ? `Your AppSumo deal is ready.</em>`
+      : `Welcome to</em> WisperTalk.`;
+  const intro = isAppSumo
+    ? isMulti
+      ? `Thanks for your AppSumo purchase. Your <strong>${licenseKeys.length}</strong> WisperTalk license keys are below — keep this email. Each key activates one device.`
+      : `Thanks for your AppSumo purchase. Your WisperTalk lifetime license is below — keep this email; it's the only place we'll send it.`
+    : isMulti
+      ? `Thanks for buying. Your <strong>${licenseKeys.length}</strong> license keys are below — keep this email; it's the only place we'll send them. Each key activates one device.`
+      : `Thanks for buying. Your license is below — keep this email; it's the only place we'll send it.`;
 
   const keysLabel = isMulti ? `License keys (${licenseKeys.length})` : 'License key';
 

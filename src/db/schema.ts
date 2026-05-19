@@ -6,11 +6,13 @@ export const licenses = pgTable(
     key: text('key').primaryKey(),
     email: text('email').notNull(),
     stripeCustomerId: text('stripe_customer_id'),
-    stripeSessionId: text('stripe_session_id').notNull(),
+    stripeSessionId: text('stripe_session_id'),
     stripePaymentIntentId: text('stripe_payment_intent_id'),
     amountCents: integer('amount_cents').notNull(),
     currency: text('currency').notNull().default('usd'),
     status: text('status').notNull().default('active'),
+    source: text('source').notNull().default('stripe'),
+    externalId: text('external_id'),
     activeDeviceId: text('active_device_id'),
     activeDeviceName: text('active_device_name'),
     activatedAt: timestamp('activated_at', { withTimezone: true }),
@@ -20,7 +22,9 @@ export const licenses = pgTable(
   (t) => ({
     emailIdx: index('licenses_email_idx').on(t.email),
     activeDeviceIdx: index('licenses_active_device_idx').on(t.activeDeviceId),
-    sessionIdx: index('licenses_session_idx').on(t.stripeSessionId)
+    sessionIdx: index('licenses_session_idx').on(t.stripeSessionId),
+    sourceIdx: index('licenses_source_idx').on(t.source),
+    externalIdx: index('licenses_external_id_idx').on(t.externalId)
   })
 );
 
