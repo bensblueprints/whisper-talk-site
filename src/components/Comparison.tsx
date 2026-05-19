@@ -25,11 +25,11 @@ const competitors = [
   },
   {
     name: 'WisperTalk',
-    price: '$49',
+    price: '$50',
     period: 'once',
-    note: 'Windows native · pay once · own it',
+    note: 'Windows + Mac · free trial · pay once',
     locked: [],
-    perks: ['no subscription', 'one device at a time', 'open source core'],
+    perks: ['free 2,000 words/month', 'no subscription', 'one device at a time'],
     highlight: true
   }
 ];

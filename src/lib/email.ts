@@ -43,7 +43,7 @@ export async function sendLicenseEmail({
     .join('');
 
   const headline = isMulti
-    ? `Welcome to</em> WisperTalk.`
+    ? `Your ${licenseKeys.length} WisperTalk licenses.`
     : `Welcome to</em> WisperTalk.`;
   const intro = isMulti
     ? `Thanks for buying. Your <strong>${licenseKeys.length}</strong> license keys are below — keep this email; it's the only place we'll send them. Each key activates one device.`

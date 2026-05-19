@@ -54,7 +54,7 @@ export function Footer() {
           <span>© 2026 Advanced Marketing · Built in BC</span>
           <span className="flex items-center gap-2">
             <span className="block w-1.5 h-1.5 rounded-full bg-ember pulse-ember" />
-            <span>shipping ·  v0.1</span>
+            <span>shipping · v0.3</span>
           </span>
         </div>
       </div>

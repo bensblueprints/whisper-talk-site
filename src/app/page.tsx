@@ -51,7 +51,7 @@ function Hero() {
             <div className="flex items-center gap-3 mb-8 rise" style={{ animationDelay: '60ms' }}>
               <span className="block w-2 h-2 rounded-full bg-ember pulse-ember" />
               <span className="font-mono text-[11px] uppercase-track text-paper-mute">
-                01 / Voice dictation · Windows + Mac · v0.2
+                01 / Voice dictation · Windows + Mac · v0.3
               </span>
             </div>
 

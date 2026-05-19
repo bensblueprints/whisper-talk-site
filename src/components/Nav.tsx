@@ -13,7 +13,7 @@ export function Nav() {
             className="h-9 sm:h-10 w-auto"
           />
           <span className="hidden sm:inline-block font-mono text-[10px] uppercase-track text-paper-faint">
-            v0.1
+            v0.3
           </span>
         </Link>
 
@@ -34,7 +34,7 @@ export function Nav() {
             href="#pricing"
             className="font-mono text-[11px] uppercase-track text-ink bg-ember hover:bg-ember-soft px-4 py-2.5 rounded-md transition-colors"
           >
-            Buy — $49
+            Buy — $50
           </Link>
         </nav>
       </div>
