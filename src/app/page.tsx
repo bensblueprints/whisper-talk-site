@@ -4,6 +4,7 @@ import { LicenseReveal } from '@/components/LicenseReveal';
 import { BuyButton } from '@/components/BuyButton';
 import { PlatformSwitcher } from '@/components/PlatformSwitcher';
 import { Marquee } from '@/components/Marquee';
+import { PressLogos } from '@/components/PressLogos';
 import { HowItWorks } from '@/components/HowItWorks';
 import { Comparison } from '@/components/Comparison';
 import { Pricing } from '@/components/Pricing';
@@ -16,6 +17,7 @@ export default function Page() {
       <BackgroundGrid />
       <Nav />
       <Hero />
+      <PressLogos />
       <Marquee />
       <HowItWorks />
       <Comparison />
@@ -75,15 +77,25 @@ function Hero() {
             </p>
 
             <div
-              className="mt-10 flex flex-wrap items-center gap-6 rise"
+              className="mt-10 flex flex-col items-start gap-4 rise"
               style={{ animationDelay: '480ms' }}
             >
-              <BuyButton />
+              <div className="flex flex-wrap items-center gap-6">
+                <BuyButton />
+                <a
+                  href="#how-it-works"
+                  className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase-track text-paper hover:text-ember-soft transition-colors"
+                >
+                  See how it works
+                  <span className="transition-transform group-hover:translate-x-1">→</span>
+                </a>
+              </div>
               <a
-                href="#how-it-works"
-                className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase-track text-paper hover:text-ember-soft transition-colors"
+                href="/download"
+                className="group inline-flex items-center gap-2 font-mono text-[11px] uppercase-track text-paper-mute hover:text-paper transition-colors"
               >
-                See how it works
+                <span className="block w-1.5 h-1.5 rounded-full bg-paper-faint group-hover:bg-ember transition-colors" />
+                Or download free — 2,000 words/month, no credit card
                 <span className="transition-transform group-hover:translate-x-1">→</span>
               </a>
             </div>
