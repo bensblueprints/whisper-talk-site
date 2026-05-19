@@ -12,8 +12,8 @@ const items = [
     a: 'License verification happens once a week, so brief offline periods are fine. Transcription itself uses Groq by default (cloud), but you can point the app at a local Ollama instance for fully offline dictation. The license check is the only thing that ever needs internet.'
   },
   {
-    q: 'Why pay $50 if FreeFlow is free on Mac?',
-    a: 'FreeFlow on Mac is excellent and we recommend it. WisperTalk runs on both Windows and macOS — the cross-platform work required from-scratch engineering for each platform. The $50 covers continued development, license infrastructure, and a real human reading your support email. You also get 2,000 free words a month before spending anything. (Compared to two years of any dictation subscription, you still come out far ahead.)'
+    q: 'Why pay $49 if FreeFlow is free on Mac?',
+    a: 'FreeFlow on Mac is excellent and we recommend it. WisperTalk runs on both Windows and macOS — the cross-platform work required from-scratch engineering for each platform. The $49 covers continued development, license infrastructure, and a real human reading your support email. You also get 2,000 free words a month before spending anything. (Compared to two years of any dictation subscription, you still come out far ahead.)'
   },
   {
     q: 'What about my data?',

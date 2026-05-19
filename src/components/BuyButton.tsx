@@ -52,7 +52,7 @@ export function BuyButton({
         disabled={loading}
         className={`group inline-flex items-center gap-3 bg-ember hover:bg-ember-soft text-ink font-medium px-6 py-3.5 rounded-lg transition-all disabled:opacity-60 disabled:cursor-wait ${className ?? ''}`}
       >
-        <span className="font-display text-2xl leading-none">$50</span>
+        <span className="font-display text-2xl leading-none">$49</span>
         <span className="block w-px h-6 bg-ink/20" />
         <span className="font-mono text-[12px] uppercase-track">
           {loading ? 'Opening…' : 'Buy lifetime →'}

@@ -34,7 +34,7 @@ export function Nav() {
             href="#pricing"
             className="font-mono text-[11px] uppercase-track text-ink bg-ember hover:bg-ember-soft px-4 py-2.5 rounded-md transition-colors"
           >
-            Buy — $50
+            Buy — $49
           </Link>
         </nav>
       </div>

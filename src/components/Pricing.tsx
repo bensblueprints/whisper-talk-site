@@ -1,4 +1,5 @@
 import { PricingBuy } from './PricingBuy';
+import { CountdownTimer } from './CountdownTimer';
 
 const includes = [
   ['lifetime updates', 'every release, free, forever'],
@@ -23,9 +24,13 @@ export function Pricing() {
             <h2 className="font-display text-5xl sm:text-7xl lg:text-8xl leading-[0.9] tracking-tight text-balance mb-6">
               Start free. <em className="text-ember">Upgrade once.</em>
             </h2>
-            <p className="text-paper-mute text-[16px] leading-relaxed max-w-lg mb-8 text-pretty">
-              Download and get 2,000 free words every month — no credit card required. Ready for unlimited? Pay $50 once. No subscription, no seat math, every future update included.
+            <p className="text-paper-mute text-[16px] leading-relaxed max-w-lg mb-6 text-pretty">
+              Download and get 2,000 free words every month — no credit card required. Ready for unlimited? Pay $49 once. No subscription, no seat math, every future update included.
             </p>
+
+            <div className="mb-8">
+              <CountdownTimer />
+            </div>
 
             <div className="grid grid-cols-2 gap-3 mb-8 max-w-[440px]">
               <div className="rounded-xl border border-paper-trace bg-ink-2/40 p-4">
@@ -46,7 +51,7 @@ export function Pricing() {
               <div className="rounded-xl border border-ember/40 bg-ember/5 p-4 relative">
                 <div className="absolute top-2 right-2 font-mono text-[9px] uppercase-track text-ember bg-ember/10 px-2 py-0.5 rounded-full">Best value</div>
                 <div className="font-mono text-[10px] uppercase-track text-paper-faint mb-2">Lifetime</div>
-                <div className="font-display text-[32px] text-ember leading-none mb-1">$50</div>
+                <div className="font-display text-[32px] text-ember leading-none mb-1">$49</div>
                 <div className="font-mono text-[11px] text-paper-faint mb-4">pay once</div>
                 <ul className="space-y-2.5">
                   <li className="flex items-start gap-2">

@@ -25,11 +25,11 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'WisperTalk — Voice dictation for Windows & Mac. Pay once.',
   description:
-    'A precise, fast, voice-to-text app for Windows and macOS. Hold a key, speak, release — clean text appears wherever your cursor is. Free trial, then $50 once. One device at a time.',
+    'A precise, fast, voice-to-text app for Windows and macOS. Hold a key, speak, release — clean text appears wherever your cursor is. Free trial, then $49 once. One device at a time.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://wispertalk.com'),
   openGraph: {
     title: 'WisperTalk — Voice dictation for Windows & Mac.',
-    description: 'Hold a key, speak, release. Free trial, then $50 once. One device at a time.',
+    description: 'Hold a key, speak, release. Free trial, then $49 once. One device at a time.',
     type: 'website',
     images: [{ url: '/og-icon.png', width: 256, height: 256, alt: 'WisperTalk' }]
   }

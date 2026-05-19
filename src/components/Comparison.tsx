@@ -25,7 +25,7 @@ const competitors = [
   },
   {
     name: 'WisperTalk',
-    price: '$50',
+    price: '$49',
     period: 'once',
     note: 'Windows + Mac · free trial · pay once',
     locked: [],
