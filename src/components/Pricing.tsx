@@ -21,11 +21,45 @@ export function Pricing() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           <div className="lg:col-span-7">
             <h2 className="font-display text-5xl sm:text-7xl lg:text-8xl leading-[0.9] tracking-tight text-balance mb-6">
-              Pay once. <em className="text-ember">Use forever.</em>
+              Start free. <em className="text-ember">Upgrade once.</em>
             </h2>
-            <p className="text-paper-mute text-[16px] leading-relaxed max-w-lg mb-10 text-pretty">
-              No trial that expires, no subscription that creeps up, no seat math. One key, one device at a time, every update included.
+            <p className="text-paper-mute text-[16px] leading-relaxed max-w-lg mb-8 text-pretty">
+              Download and get 2,000 free words every month — no credit card required. Ready for unlimited? Pay $50 once. No subscription, no seat math, every future update included.
             </p>
+
+            <div className="grid grid-cols-2 gap-3 mb-8 max-w-[440px]">
+              <div className="rounded-xl border border-paper-trace bg-ink-2/40 p-4">
+                <div className="font-mono text-[10px] uppercase-track text-paper-faint mb-2">Free</div>
+                <div className="font-display text-[32px] text-paper leading-none mb-1">$0</div>
+                <div className="font-mono text-[11px] text-paper-faint mb-4">always</div>
+                <ul className="space-y-2.5">
+                  <li className="flex items-start gap-2">
+                    <span className="block w-1 h-1 rounded-full bg-paper-faint mt-2 flex-shrink-0" />
+                    <span className="text-paper-mute text-[12.5px]">2,000 words / month</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="block w-1 h-1 rounded-full bg-paper-faint mt-2 flex-shrink-0" />
+                    <span className="text-paper-mute text-[12.5px]">No credit card needed</span>
+                  </li>
+                </ul>
+              </div>
+              <div className="rounded-xl border border-ember/40 bg-ember/5 p-4 relative">
+                <div className="absolute top-2 right-2 font-mono text-[9px] uppercase-track text-ember bg-ember/10 px-2 py-0.5 rounded-full">Best value</div>
+                <div className="font-mono text-[10px] uppercase-track text-paper-faint mb-2">Lifetime</div>
+                <div className="font-display text-[32px] text-ember leading-none mb-1">$50</div>
+                <div className="font-mono text-[11px] text-paper-faint mb-4">pay once</div>
+                <ul className="space-y-2.5">
+                  <li className="flex items-start gap-2">
+                    <span className="block w-1 h-1 rounded-full bg-ember mt-2 flex-shrink-0" />
+                    <span className="text-paper-mute text-[12.5px]">Unlimited words</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="block w-1 h-1 rounded-full bg-ember mt-2 flex-shrink-0" />
+                    <span className="text-paper-mute text-[12.5px]">All future updates</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
 
             <PricingBuy />
 

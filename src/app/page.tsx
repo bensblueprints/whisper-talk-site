@@ -70,7 +70,8 @@ function Hero() {
             >
               A small, fast dictation app that turns rough speech into clean text inside whatever
               you're typing in. Hold a key, talk, release. Cleanup happens before the words land.
-              Pay <em className="not-italic text-paper">forty-nine dollars</em> once. No subscription.
+              Start free — <em className="not-italic text-paper">2,000 words a month</em> at no cost.
+              Upgrade once for <em className="not-italic text-paper">$50</em> and get unlimited words, forever.
             </p>
 
             <div
@@ -91,6 +92,7 @@ function Hero() {
               className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3 rise"
               style={{ animationDelay: '640ms' }}
             >
+              <Chip label="Free 2k words/mo" />
               <Chip label="Windows 10/11" />
               <Chip label="macOS 11+" />
               <Chip label="Apple Silicon + Intel" />

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-const BASE_PRICE = 49;
+const BASE_PRICE = 50;
 const ADDITIONAL_PRICE = 10;
 const MAX_EXTRAS = 20;
 
@@ -106,7 +106,7 @@ export function PricingBuy() {
         </button>
         {extras > 0 && !loading && (
           <span className="font-mono text-[11px] text-paper-faint">
-            $49 base + {extras} × $10 extra
+            $50 base + {extras} × $10 extra
           </span>
         )}
         {error && <span className="font-mono text-[11px] text-ember">{error}</span>}
