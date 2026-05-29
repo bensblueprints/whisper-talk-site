@@ -88,7 +88,15 @@ async function handleValid(data: Record<string, unknown>) {
   }
 
   const plan = (data.plan ?? {}) as Record<string, unknown>;
+  const planId = String(plan.id ?? '');
   const amountCents = Math.round(Number(plan.price ?? data.checkout_price ?? 0) * 100);
+
+  // Only issue keys for the paid lifetime plan — skip free tier
+  const paidPlanId = process.env.WHOP_PAID_PLAN_ID || 'plan_cM14gKwLOrelj';
+  if (planId && planId !== paidPlanId) {
+    console.log(`Whop webhook: skipping key for free/unknown plan ${planId} on membership ${membershipId}`);
+    return;
+  }
 
   // Store Whop's key. Whop already shows the key to the customer in their hub — no email needed.
   await db.insert(schema.licenses).values({
