@@ -69,7 +69,7 @@ export function Pricing() {
             <PricingBuy />
 
             <p className="font-mono text-[11px] text-paper-faint mt-4 max-w-md leading-relaxed">
-              Stripe checkout · 30-day refund · license sent to your email immediately
+              Whop checkout · 30-day refund · license key delivered instantly
             </p>
           </div>
 
