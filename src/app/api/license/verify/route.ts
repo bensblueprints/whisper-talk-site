@@ -79,7 +79,7 @@ async function verifyWhop(
     }
   );
 
-  if (whopRes.status === 201) {
+  if (whopRes.status === 200 || whopRes.status === 201) {
     await db.insert(schema.deviceEvents).values({
       id: randomUUID(),
       licenseKey: key,

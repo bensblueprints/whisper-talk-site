@@ -100,7 +100,7 @@ async function activateWhop(
     }
   );
 
-  if (whopRes.status === 201) {
+  if (whopRes.status === 200 || whopRes.status === 201) {
     const wasReassigned = !!lic.activeDeviceId && lic.activeDeviceId !== fp;
 
     await db
