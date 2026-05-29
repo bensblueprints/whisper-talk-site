@@ -72,7 +72,8 @@ export async function POST(req: Request) {
   });
 
   const token = await signDeviceToken(key, parsed.deviceId);
-  return NextResponse.json({ ok: true, token, licenseKey: key, email: lic.email, reassigned: wasReassigned });
+  const tier = lic.amountCents === 0 ? 'free' : 'paid';
+  return NextResponse.json({ ok: true, token, licenseKey: key, email: lic.email, reassigned: wasReassigned, tier });
 }
 
 async function activateWhop(
@@ -119,7 +120,8 @@ async function activateWhop(
     });
 
     const token = await signDeviceToken(key, deviceId);
-    return NextResponse.json({ ok: true, token, licenseKey: key, email: lic.email, reassigned: wasReassigned });
+    const tier = lic.amountCents === 0 ? 'free' : 'paid';
+    return NextResponse.json({ ok: true, token, licenseKey: key, email: lic.email, reassigned: wasReassigned, tier });
   }
 
   if (whopRes.status === 400) {
