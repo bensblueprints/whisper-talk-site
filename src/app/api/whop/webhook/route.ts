@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
 import { db, schema } from '@/lib/db';
-import { generateLicenseKey } from '@/lib/license';
-import { sendLicenseEmail } from '@/lib/email';
 import { eq } from 'drizzle-orm';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
@@ -19,7 +17,6 @@ function verifySignature(rawBody: string, header: string | null): boolean {
   const sig = parts['v1'];
   if (!timestamp || !sig) return false;
 
-  // Reject stale webhooks (5-minute window)
   const age = Math.abs(Date.now() / 1000 - Number(timestamp));
   if (age > 300) return false;
 
@@ -67,9 +64,15 @@ export async function POST(req: Request) {
 
 async function handleValid(data: Record<string, unknown>) {
   const membershipId = String(data.id ?? '');
-  if (!membershipId) return;
+  // Whop generates and delivers the license key — use it directly
+  const licenseKey = String(data.license_key ?? '');
 
-  // Idempotency: skip if we already issued a key for this membership
+  if (!membershipId || !licenseKey) {
+    console.error('Whop webhook: missing id or license_key', { membershipId, licenseKey });
+    return;
+  }
+
+  // Idempotency: skip if we already recorded this membership
   const existing = await db
     .select({ key: schema.licenses.key })
     .from(schema.licenses)
@@ -85,22 +88,11 @@ async function handleValid(data: Record<string, unknown>) {
   }
 
   const plan = (data.plan ?? {}) as Record<string, unknown>;
-  // Whop stores amount as a number in dollars (e.g. 49 for $49)
   const amountCents = Math.round(Number(plan.price ?? data.checkout_price ?? 0) * 100);
 
-  let key = generateLicenseKey();
-  for (let attempt = 0; attempt < 5; attempt++) {
-    const dup = await db
-      .select({ key: schema.licenses.key })
-      .from(schema.licenses)
-      .where(eq(schema.licenses.key, key))
-      .limit(1);
-    if (dup.length === 0) break;
-    key = generateLicenseKey();
-  }
-
+  // Store Whop's key. Whop already shows the key to the customer in their hub — no email needed.
   await db.insert(schema.licenses).values({
-    key,
+    key: licenseKey,
     email,
     amountCents,
     currency: 'usd',
@@ -108,23 +100,6 @@ async function handleValid(data: Record<string, unknown>) {
     source: 'whop',
     externalId: membershipId
   });
-
-  const downloadUrl =
-    process.env.NEXT_PUBLIC_DOWNLOAD_URL ||
-    'https://github.com/bensblueprints/wispertalk-releases/releases/latest';
-
-  try {
-    await sendLicenseEmail({
-      to: email,
-      licenseKeys: [key],
-      downloadUrl,
-      amountCents,
-      currency: 'usd',
-      source: 'whop'
-    });
-  } catch (err) {
-    console.error('Whop email send failed (license still recorded):', err);
-  }
 }
 
 async function handleInvalid(data: Record<string, unknown>) {
