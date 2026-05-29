@@ -80,13 +80,21 @@ async function handleActivated(data: Record<string, unknown>) {
     return;
   }
 
-  // Idempotency check
+  // If membership already exists but key changed (user reset in Whop hub), update to new key
   const existing = await db
     .select({ key: schema.licenses.key })
     .from(schema.licenses)
     .where(eq(schema.licenses.externalId, membershipId))
     .limit(1);
-  if (existing.length > 0) return;
+  if (existing.length > 0) {
+    if (existing[0].key === licenseKey) return; // identical, skip
+    await db
+      .update(schema.licenses)
+      .set({ key: licenseKey, activeDeviceId: null, activeDeviceName: null, activatedAt: null })
+      .where(eq(schema.licenses.externalId, membershipId));
+    console.log(`Whop: updated reset key for membership ${membershipId}`);
+    return;
+  }
 
   const user = (data.user ?? {}) as Record<string, unknown>;
   const email = String(user.email ?? '');

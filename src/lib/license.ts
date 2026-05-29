@@ -16,10 +16,16 @@ export function generateLicenseKey(): string {
 
 export function normalizeLicenseKey(key: string): string {
   const cleaned = key.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  if (!cleaned.startsWith('WT')) return key.trim().toUpperCase();
-  const body = cleaned.slice(2);
-  if (body.length !== 16) return key.trim().toUpperCase();
-  return `WT-${body.slice(0, 4)}-${body.slice(4, 8)}-${body.slice(8, 12)}-${body.slice(12, 16)}`;
+  // WT-XXXX-XXXX-XXXX-XXXX (local keys)
+  if (cleaned.startsWith('WT') && cleaned.length === 18) {
+    const body = cleaned.slice(2);
+    return `WT-${body.slice(0, 4)}-${body.slice(4, 8)}-${body.slice(8, 12)}-${body.slice(12, 16)}`;
+  }
+  // W-XXXXXX-XXXXXXXX-XXXXXXXW (Whop keys, 22 chars stripped)
+  if (cleaned.startsWith('W') && cleaned.endsWith('W') && cleaned.length === 22) {
+    return `W-${cleaned.slice(1, 7)}-${cleaned.slice(7, 15)}-${cleaned.slice(15, 22)}`;
+  }
+  return key.trim().toUpperCase();
 }
 
 export function fingerprintDevice(deviceId: string): string {
