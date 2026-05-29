@@ -147,8 +147,24 @@ async function handleActivated(data: Record<string, unknown>) {
     return;
   }
 
-  // Free tier or unknown plan — skip
-  console.log(`Whop webhook: skipping key for plan ${planId} on membership ${membershipId}`);
+  // Free tier — store the key so activation works in the app (word limit enforced client-side)
+  const freePlanId = process.env.WHOP_FREE_PLAN_ID || 'plan_WcXGMgVYoqMEn';
+  if (planId === freePlanId) {
+    await db.insert(schema.licenses).values({
+      key: licenseKey,
+      email,
+      amountCents: 0,
+      currency: 'usd',
+      status: 'active',
+      source: 'whop',
+      externalId: membershipId
+    });
+    console.log(`Whop: issued free trial key for ${email}`);
+    return;
+  }
+
+  // Truly unknown plan — skip
+  console.log(`Whop webhook: skipping unknown plan ${planId} on membership ${membershipId}`);
 }
 
 async function handleDeactivated(data: Record<string, unknown>) {
