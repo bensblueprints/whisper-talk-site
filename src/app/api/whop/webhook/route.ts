@@ -49,9 +49,9 @@ export async function POST(req: Request) {
   const data = (body.data ?? {}) as Record<string, unknown>;
 
   try {
-    if (action === 'membership.went_valid') {
+    if (action === 'membership_activated') {
       await handleValid(data);
-    } else if (action === 'membership.went_invalid') {
+    } else if (action === 'membership_deactivated') {
       await handleInvalid(data);
     }
   } catch (err) {
