@@ -1,13 +1,22 @@
 import { NextResponse } from 'next/server';
 import { db, schema } from '@/lib/db';
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-// Whop signs webhooks with HMAC-SHA256: signature = HMAC(secret, "<timestamp>.<rawBody>")
-// Header format: "whop-signature: t=<timestamp>,v1=<sig>"
+// Paid lifetime plans — comma-separated in WHOP_PAID_PLAN_IDS
+// plan_cM14gKwLOrelj ($49, original) + plan_Oh4HMckTmxXcE ($49.99, current main)
+function getPaidPlanIds(): Set<string> {
+  const raw = process.env.WHOP_PAID_PLAN_IDS || 'plan_cM14gKwLOrelj,plan_Oh4HMckTmxXcE';
+  return new Set(raw.split(',').map((s) => s.trim()).filter(Boolean));
+}
+
+function getAddonPlanId(): string {
+  return process.env.WHOP_ADDON_PLAN_ID || 'plan_fiK0F85A7ml2P';
+}
+
 function verifySignature(rawBody: string, header: string | null): boolean {
   const secret = process.env.WHOP_WEBHOOK_SECRET;
   if (!secret || !header) return false;
@@ -50,9 +59,9 @@ export async function POST(req: Request) {
 
   try {
     if (action === 'membership_activated') {
-      await handleValid(data);
+      await handleActivated(data);
     } else if (action === 'membership_deactivated') {
-      await handleInvalid(data);
+      await handleDeactivated(data);
     }
   } catch (err) {
     console.error('Whop webhook handler error:', err);
@@ -62,9 +71,8 @@ export async function POST(req: Request) {
   return NextResponse.json({ received: true });
 }
 
-async function handleValid(data: Record<string, unknown>) {
+async function handleActivated(data: Record<string, unknown>) {
   const membershipId = String(data.id ?? '');
-  // Whop generates and delivers the license key — use it directly
   const licenseKey = String(data.license_key ?? '');
 
   if (!membershipId || !licenseKey) {
@@ -72,7 +80,7 @@ async function handleValid(data: Record<string, unknown>) {
     return;
   }
 
-  // Idempotency: skip if we already recorded this membership
+  // Idempotency check
   const existing = await db
     .select({ key: schema.licenses.key })
     .from(schema.licenses)
@@ -91,26 +99,59 @@ async function handleValid(data: Record<string, unknown>) {
   const planId = String(plan.id ?? '');
   const amountCents = Math.round(Number(plan.price ?? data.checkout_price ?? 0) * 100);
 
-  // Only issue keys for the paid lifetime plan — skip free tier
-  const paidPlanId = process.env.WHOP_PAID_PLAN_ID || 'plan_cM14gKwLOrelj';
-  if (planId && planId !== paidPlanId) {
-    console.log(`Whop webhook: skipping key for free/unknown plan ${planId} on membership ${membershipId}`);
+  if (getPaidPlanIds().has(planId)) {
+    // Main lifetime purchase — issue key directly
+    await db.insert(schema.licenses).values({
+      key: licenseKey,
+      email,
+      amountCents,
+      currency: 'usd',
+      status: 'active',
+      source: 'whop',
+      externalId: membershipId
+    });
+    console.log(`Whop: issued lifetime key for ${email} (plan ${planId})`);
     return;
   }
 
-  // Store Whop's key. Whop already shows the key to the customer in their hub — no email needed.
-  await db.insert(schema.licenses).values({
-    key: licenseKey,
-    email,
-    amountCents,
-    currency: 'usd',
-    status: 'active',
-    source: 'whop',
-    externalId: membershipId
-  });
+  if (planId === getAddonPlanId()) {
+    // Addon purchase — only issue if buyer already has an active lifetime key
+    const hasLifetime = await db
+      .select({ key: schema.licenses.key })
+      .from(schema.licenses)
+      .where(
+        and(
+          eq(schema.licenses.email, email),
+          eq(schema.licenses.source, 'whop'),
+          eq(schema.licenses.status, 'active')
+        )
+      )
+      .limit(1);
+
+    if (hasLifetime.length === 0) {
+      // No lifetime key on this email — don't issue. They need to contact support.
+      console.warn(`Whop addon: ${email} bought addon (${membershipId}) but has no lifetime key — skipping`);
+      return;
+    }
+
+    await db.insert(schema.licenses).values({
+      key: licenseKey,
+      email,
+      amountCents,
+      currency: 'usd',
+      status: 'active',
+      source: 'whop',
+      externalId: membershipId
+    });
+    console.log(`Whop: issued addon key for ${email}`);
+    return;
+  }
+
+  // Free tier or unknown plan — skip
+  console.log(`Whop webhook: skipping key for plan ${planId} on membership ${membershipId}`);
 }
 
-async function handleInvalid(data: Record<string, unknown>) {
+async function handleDeactivated(data: Record<string, unknown>) {
   const membershipId = String(data.id ?? '');
   if (!membershipId) return;
 
