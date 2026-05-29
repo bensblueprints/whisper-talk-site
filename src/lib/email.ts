@@ -11,7 +11,7 @@ interface LicenseEmailProps {
   downloadUrl: string;
   amountCents: number;
   currency: string;
-  source?: 'stripe' | 'appsumo';
+  source?: 'stripe' | 'appsumo' | 'whop';
 }
 
 export async function sendLicenseEmail({
@@ -45,6 +45,7 @@ export async function sendLicenseEmail({
     .join('');
 
   const isAppSumo = source === 'appsumo';
+  const isWhop = source === 'whop';
   const headline = isMulti
     ? `Your ${licenseKeys.length} WisperTalk licenses.`
     : isAppSumo
@@ -54,9 +55,11 @@ export async function sendLicenseEmail({
     ? isMulti
       ? `Thanks for your AppSumo purchase. Your <strong>${licenseKeys.length}</strong> WisperTalk license keys are below — keep this email. Each key activates one device.`
       : `Thanks for your AppSumo purchase. Your WisperTalk lifetime license is below — keep this email; it's the only place we'll send it.`
-    : isMulti
-      ? `Thanks for buying. Your <strong>${licenseKeys.length}</strong> license keys are below — keep this email; it's the only place we'll send them. Each key activates one device.`
-      : `Thanks for buying. Your license is below — keep this email; it's the only place we'll send it.`;
+    : isWhop
+      ? `Thanks for your Whop purchase. Your WisperTalk lifetime license is below — keep this email; it's the only place we'll send it.`
+      : isMulti
+        ? `Thanks for buying. Your <strong>${licenseKeys.length}</strong> license keys are below — keep this email; it's the only place we'll send them. Each key activates one device.`
+        : `Thanks for buying. Your license is below — keep this email; it's the only place we'll send it.`;
 
   const keysLabel = isMulti ? `License keys (${licenseKeys.length})` : 'License key';
 
