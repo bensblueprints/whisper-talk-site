@@ -95,32 +95,24 @@ async function activateWhopKnown(
   const apiKey = process.env.WHOP_API_KEY;
   if (!apiKey) return NextResponse.json({ ok: false, error: 'server_error' }, { status: 500 });
 
-  const whopRes = await fetch(
-    `https://api.whop.com/api/v2/memberships/${encodeURIComponent(key)}/validate_license`,
-    {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ metadata: { machine_id: deviceId } })
-    }
-  );
+  let status = await whopValidateLicense(key, deviceId, apiKey);
 
-  if (whopRes.status === 200 || whopRes.status === 201) {
-    const wasReassigned = !!lic.activeDeviceId && lic.activeDeviceId !== fp;
-    await db.update(schema.licenses)
-      .set({ activeDeviceId: fp, activeDeviceName: deviceName ?? null, activatedAt: new Date() })
-      .where(eq(schema.licenses.key, key));
-    await db.insert(schema.deviceEvents).values({
-      id: randomUUID(), licenseKey: key, deviceId: fp, deviceName: deviceName ?? null,
-      kind: wasReassigned ? 'reassign' : 'activate',
-      ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null,
-      userAgent: req.headers.get('user-agent') ?? null
-    });
-    const token = await signDeviceToken(key, deviceId);
-    const tier = lic.amountCents === 0 ? 'free' : 'paid';
-    return NextResponse.json({ ok: true, token, licenseKey: key, email: lic.email, reassigned: wasReassigned, tier });
+  // 400 = Whop has this key bound to a different machine. If the user explicitly chose
+  // "Move license here" (force), clear the machine binding on Whop's side and re-validate
+  // so the move actually happens. Without this, force was silently ignored for Whop keys
+  // and the "Move license here" button did nothing.
+  if (status === 400 && force && lic.externalId) {
+    const didReset = await resetWhopMachineBinding(lic.externalId, apiKey);
+    if (didReset) {
+      status = await whopValidateLicense(key, deviceId, apiKey);
+    }
   }
 
-  if (whopRes.status === 400) {
+  if (status === 200 || status === 201) {
+    return bindWhopDevice(lic, key, deviceId, deviceName, fp, req);
+  }
+
+  if (status === 400) {
     return NextResponse.json({
       ok: false, error: 'already_active',
       message: 'This license is active on another device. To move it, visit whop.com/@me and reset your license key.',
@@ -128,9 +120,70 @@ async function activateWhopKnown(
     }, { status: 409 });
   }
 
-  const body = await whopRes.text().catch(() => '');
-  console.error('Whop validate_license unexpected response', whopRes.status, body);
+  console.error('Whop validate_license unexpected response', status);
   return NextResponse.json({ ok: false, error: 'invalid_key' }, { status: 404 });
+}
+
+// POST validate_license with the device's machine_id. Returns the HTTP status:
+// 200/201 = bound (newly set or already matching), 400 = bound to a different machine,
+// 0/other = network or unexpected error.
+async function whopValidateLicense(key: string, deviceId: string, apiKey: string): Promise<number> {
+  try {
+    const res = await fetch(
+      `https://api.whop.com/api/v2/memberships/${encodeURIComponent(key)}/validate_license`,
+      {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ metadata: { machine_id: deviceId } })
+      }
+    );
+    return res.status;
+  } catch (err) {
+    console.error('Whop validate_license request failed', err);
+    return 0;
+  }
+}
+
+// Clears the machine binding on a Whop membership by resetting its metadata, freeing the
+// license to be re-validated against a new device. Returns true on success.
+async function resetWhopMachineBinding(membershipId: string, apiKey: string): Promise<boolean> {
+  try {
+    const res = await fetch(
+      `https://api.whop.com/api/v2/memberships/${encodeURIComponent(membershipId)}`,
+      {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ metadata: {} })
+      }
+    );
+    if (res.status === 200 || res.status === 201) return true;
+    const body = await res.text().catch(() => '');
+    console.error('Whop reset machine binding failed', res.status, body);
+    return false;
+  } catch (err) {
+    console.error('Whop reset machine binding request failed', err);
+    return false;
+  }
+}
+
+// Persists the device binding locally and returns the activation success response.
+async function bindWhopDevice(
+  lic: License, key: string, deviceId: string,
+  deviceName: string | undefined, fp: string, req: Request
+) {
+  const wasReassigned = !!lic.activeDeviceId && lic.activeDeviceId !== fp;
+  await db.update(schema.licenses)
+    .set({ activeDeviceId: fp, activeDeviceName: deviceName ?? null, activatedAt: new Date() })
+    .where(eq(schema.licenses.key, key));
+  await db.insert(schema.deviceEvents).values({
+    id: randomUUID(), licenseKey: key, deviceId: fp, deviceName: deviceName ?? null,
+    kind: wasReassigned ? 'reassign' : 'activate',
+    ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? null,
+    userAgent: req.headers.get('user-agent') ?? null
+  });
+  const token = await signDeviceToken(key, deviceId);
+  const tier = lic.amountCents === 0 ? 'free' : 'paid';
+  return NextResponse.json({ ok: true, token, licenseKey: key, email: lic.email, reassigned: wasReassigned, tier });
 }
 
 // Key not in DB — call Whop API, upsert membership, then activate
