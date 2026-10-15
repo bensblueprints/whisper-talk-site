@@ -21,6 +21,7 @@ export function Footer() {
               <li><Link href="#pricing" className="hover:text-paper transition-colors">Pricing</Link></li>
               <li><Link href="/download" className="hover:text-paper transition-colors">Download</Link></li>
               <li><Link href="/account" className="hover:text-paper transition-colors">Manage license</Link></li>
+              <li><Link href="/reseller" className="hover:text-paper transition-colors">Reseller program</Link></li>
             </ul>
           </div>
 

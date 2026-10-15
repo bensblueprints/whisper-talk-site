@@ -122,3 +122,133 @@ Reply to this email if anything goes wrong.`;
 
   return resend.emails.send({ from, to, subject, html, text });
 }
+
+const emailShell = (headline: string, body: string) => `<!doctype html>
+<html><body style="margin:0;padding:0;background:#06070d;font-family:'Manrope',-apple-system,'Segoe UI',sans-serif;color:#f4f1ea">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#06070d;padding:48px 16px">
+    <tr><td align="center">
+      <table width="540" cellpadding="0" cellspacing="0" style="max-width:540px;background:#0d0f1a;border:1px solid #171a2b;border-radius:14px;padding:32px">
+        <tr><td>
+          <div style="font-family:'Instrument Serif',Georgia,serif;font-size:36px;line-height:1.1;color:#f4f1ea;margin-bottom:16px">
+            <em>${headline}
+          </div>
+          ${body}
+          <div style="font-size:12px;color:#6a6d85;margin-top:32px;padding-top:20px;border-top:1px solid #171a2b">
+            WisperTalk reseller program · Questions? Reply to this email.
+          </div>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+
+export async function sendResellerWelcomeEmail({
+  to,
+  dashboardUrl,
+  amountCents,
+  currency
+}: {
+  to: string;
+  dashboardUrl: string;
+  amountCents: number;
+  currency: string;
+}) {
+  if (!resend) {
+    console.warn('Resend not configured — skipping reseller welcome email. Would have sent:', { to, dashboardUrl });
+    return { skipped: true };
+  }
+
+  const amount = (amountCents / 100).toLocaleString('en-US', {
+    style: 'currency',
+    currency: currency.toUpperCase()
+  });
+
+  const html = emailShell(
+    'You can now sell</em> WisperTalk.',
+    `
+    <p style="color:#9ea0b8;font-size:14px;line-height:1.6;margin:0 0 24px">
+      Your reseller license is active (${amount}, one-time). You can generate
+      <strong style="color:#f4f1ea">unlimited lifetime license keys</strong> from your private dashboard
+      and sell them at any price you want. Every dollar of every sale is yours.
+    </p>
+    <a href="${dashboardUrl}" style="display:inline-block;background:#ff7a3a;color:#06070d;padding:14px 22px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:0.02em">
+      Open your reseller dashboard →
+    </a>
+    <p style="color:#6a6d85;font-size:12px;line-height:1.6;margin:24px 0 0">
+      Bookmark that link — it's the only way into your dashboard (no password, the link itself is the key).
+      Keep it private; anyone with the link can generate keys on your account.
+    </p>`
+  );
+
+  const text = `WisperTalk reseller license active (${amount})
+
+Your reseller dashboard (bookmark this — it IS your login):
+${dashboardUrl}
+
+Generate unlimited lifetime keys, sell at any price, keep 100%. Keep the link private — anyone with it can generate keys on your account.
+
+Reply to this email if anything goes wrong.`;
+
+  return resend.emails.send({
+    from,
+    to,
+    subject: 'Your WisperTalk reseller dashboard is ready',
+    html,
+    text
+  });
+}
+
+export async function sendResellerKeyEmail({
+  to,
+  resellerName,
+  licenseKey,
+  downloadUrl
+}: {
+  to: string;
+  resellerName: string;
+  licenseKey: string;
+  downloadUrl: string;
+}) {
+  if (!resend) {
+    console.warn('Resend not configured — skipping reseller key email. Would have sent:', { to, licenseKey });
+    return { skipped: true };
+  }
+
+  const html = emailShell(
+    'Your</em> WisperTalk license.',
+    `
+    <p style="color:#9ea0b8;font-size:14px;line-height:1.6;margin:0 0 24px">
+      Thanks for your purchase${resellerName ? ` from <strong style="color:#f4f1ea">${resellerName}</strong>` : ''}.
+      Your WisperTalk lifetime license key is below — keep this email.
+    </p>
+    <div style="background:#06070d;border:1px solid #2a2d44;border-radius:10px;padding:18px 20px;margin-bottom:20px">
+      <div style="font-family:'JetBrains Mono','SF Mono',Consolas,monospace;font-size:18px;color:#ff7a3a;letter-spacing:0.04em">
+        ${licenseKey}
+      </div>
+    </div>
+    <a href="${downloadUrl}" style="display:inline-block;background:#ff7a3a;color:#06070d;padding:14px 22px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:0.02em">
+      Download WisperTalk →
+    </a>
+    <div style="font-size:13px;color:#9ea0b8;line-height:1.7;margin-top:24px">
+      <strong style="color:#f4f1ea">How it works:</strong><br/>
+      1. Install the app and open it.<br/>
+      2. Paste your license key when prompted.<br/>
+      3. Hold your hotkey and start dictating.<br/><br/>
+      One key = one device at a time.
+    </div>`
+  );
+
+  const text = `Your WisperTalk license key: ${licenseKey}
+
+Download: ${downloadUrl}
+
+Open the app, paste the key when prompted, and hold your hotkey to dictate. One key = one device at a time.`;
+
+  return resend.emails.send({
+    from,
+    to,
+    subject: `Your WisperTalk license — ${licenseKey}`,
+    html,
+    text
+  });
+}

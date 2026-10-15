@@ -13,6 +13,7 @@ export const licenses = pgTable(
     status: text('status').notNull().default('active'),
     source: text('source').notNull().default('stripe'),
     externalId: text('external_id'),
+    resellerId: text('reseller_id'),
     activeDeviceId: text('active_device_id'),
     activeDeviceName: text('active_device_name'),
     activatedAt: timestamp('activated_at', { withTimezone: true }),
@@ -24,7 +25,31 @@ export const licenses = pgTable(
     activeDeviceIdx: index('licenses_active_device_idx').on(t.activeDeviceId),
     sessionIdx: index('licenses_session_idx').on(t.stripeSessionId),
     sourceIdx: index('licenses_source_idx').on(t.source),
-    externalIdx: index('licenses_external_id_idx').on(t.externalId)
+    externalIdx: index('licenses_external_id_idx').on(t.externalId),
+    resellerIdx: index('licenses_reseller_idx').on(t.resellerId)
+  })
+);
+
+export const resellers = pgTable(
+  'resellers',
+  {
+    id: text('id').primaryKey(),
+    email: text('email').notNull(),
+    name: text('name'),
+    stripeCustomerId: text('stripe_customer_id'),
+    stripeSessionId: text('stripe_session_id'),
+    stripePaymentIntentId: text('stripe_payment_intent_id'),
+    amountCents: integer('amount_cents').notNull(),
+    currency: text('currency').notNull().default('usd'),
+    accessToken: text('access_token').notNull().unique(),
+    status: text('status').notNull().default('active'),
+    refundedAt: timestamp('refunded_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull()
+  },
+  (t) => ({
+    emailIdx: index('resellers_email_idx').on(t.email),
+    sessionIdx: index('resellers_session_idx').on(t.stripeSessionId),
+    piIdx: index('resellers_pi_idx').on(t.stripePaymentIntentId)
   })
 );
 
@@ -60,3 +85,4 @@ export const stripeEvents = pgTable(
 export type License = typeof licenses.$inferSelect;
 export type NewLicense = typeof licenses.$inferInsert;
 export type DeviceEvent = typeof deviceEvents.$inferSelect;
+export type Reseller = typeof resellers.$inferSelect;
