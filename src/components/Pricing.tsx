@@ -1,5 +1,6 @@
 import { PricingBuy } from './PricingBuy';
 import { CountdownTimer } from './CountdownTimer';
+import { saleActive, appPriceCents, APP_RETAIL_CENTS, fmtCents } from '@/lib/sale';
 
 const includes = [
   ['lifetime updates', 'every release, free, forever'],
@@ -11,6 +12,9 @@ const includes = [
 ];
 
 export function Pricing() {
+  const sale = saleActive();
+  const price = fmtCents(appPriceCents());
+
   return (
     <section id="pricing" className="px-6 lg:px-10 py-24 lg:py-32 relative">
       <div className="mx-auto max-w-[1280px]">
@@ -25,7 +29,19 @@ export function Pricing() {
               Start free. <em className="text-ember">Upgrade once.</em>
             </h2>
             <p className="text-paper-mute text-[16px] leading-relaxed max-w-lg mb-6 text-pretty">
-              Download and get 2,000 free words every month — no credit card required. Ready for unlimited? Pay $49 once. No subscription, no seat math, every future update included.
+              Download and get 2,000 free words every month — no credit card required. Ready for unlimited?{' '}
+              {sale ? (
+                <>
+                  <span className="text-paper">{price}</span> in our Halloween deal — the{' '}
+                  <em className="text-ember not-italic">talk of the town</em> until Nov 1, then back
+                  to <span className="text-paper">{fmtCents(APP_RETAIL_CENTS)}</span>. Pay once — no
+                  subscription, no seat math, every future update included.
+                </>
+              ) : (
+                <>
+                  Pay {price} once. No subscription, no seat math, every future update included.
+                </>
+              )}
             </p>
 
             <div className="mb-8">
@@ -49,10 +65,21 @@ export function Pricing() {
                 </ul>
               </div>
               <div className="rounded-xl border border-ember/40 bg-ember/5 p-4 relative">
-                <div className="absolute top-2 right-2 font-mono text-[9px] uppercase-track text-ember bg-ember/10 px-2 py-0.5 rounded-full">Best value</div>
+                <div className="absolute top-2 right-2 font-mono text-[9px] uppercase-track text-ember bg-ember/10 px-2 py-0.5 rounded-full">
+                  {sale ? 'Halloween deal' : 'Best value'}
+                </div>
                 <div className="font-mono text-[10px] uppercase-track text-paper-faint mb-2">Lifetime</div>
-                <div className="font-display text-[32px] text-ember leading-none mb-1">$49</div>
-                <div className="font-mono text-[11px] text-paper-faint mb-4">pay once</div>
+                <div className="font-display text-[32px] text-ember leading-none mb-1">
+                  {sale && (
+                    <span className="line-through opacity-50 text-[22px] mr-2">
+                      {fmtCents(APP_RETAIL_CENTS)}
+                    </span>
+                  )}
+                  {price}
+                </div>
+                <div className="font-mono text-[11px] text-paper-faint mb-4">
+                  {sale ? 'until Nov 1' : 'pay once'}
+                </div>
                 <ul className="space-y-2.5">
                   <li className="flex items-start gap-2">
                     <span className="block w-1 h-1 rounded-full bg-ember mt-2 flex-shrink-0" />

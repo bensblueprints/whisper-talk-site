@@ -1,3 +1,5 @@
+import { appPriceCents, saleActive, fmtCents } from '@/lib/sale';
+
 const competitors = [
   {
     name: 'Wispr Flow',
@@ -25,9 +27,11 @@ const competitors = [
   },
   {
     name: 'WisperTalk',
-    price: '$49',
+    price: fmtCents(appPriceCents()),
     period: 'once',
-    note: 'Windows + Mac · free trial · pay once',
+    note: saleActive()
+      ? 'Windows + Mac · free trial · Halloween deal ends Nov 1'
+      : 'Windows + Mac · free trial · pay once',
     locked: [],
     perks: ['free 2,000 words/month', 'no subscription', 'one device at a time'],
     highlight: true

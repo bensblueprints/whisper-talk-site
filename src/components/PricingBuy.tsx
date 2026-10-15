@@ -1,18 +1,30 @@
 'use client';
 
+import { saleActive, appPriceCents, APP_RETAIL_CENTS, fmtCents } from '@/lib/sale';
+
 const WHOP_LIFETIME = 'https://whop.com/checkout/plan_Oh4HMckTmxXcE';
 const WHOP_ADDON = 'https://whop.com/checkout/plan_fiK0F85A7ml2P';
 
 export function PricingBuy() {
+  const sale = saleActive();
+  const price = fmtCents(appPriceCents());
+
   return (
     <div className="flex flex-col gap-4 max-w-[440px]">
       <a
         href={WHOP_LIFETIME}
         className="group inline-flex items-center gap-3 bg-ember hover:bg-ember-soft text-ink font-medium px-6 py-3.5 rounded-lg transition-all"
       >
-        <span className="font-display text-2xl leading-none">$49</span>
+        <span className="font-display text-2xl leading-none">
+          {sale && (
+            <span className="line-through opacity-50 text-lg mr-2">{fmtCents(APP_RETAIL_CENTS)}</span>
+          )}
+          {price}
+        </span>
         <span className="block w-px h-6 bg-ink/20" />
-        <span className="font-mono text-[12px] uppercase-track">Buy lifetime →</span>
+        <span className="font-mono text-[12px] uppercase-track">
+          {sale ? 'Halloween deal — ends Nov 1 →' : 'Buy lifetime →'}
+        </span>
       </a>
 
       <p className="font-mono text-[11px] text-paper-faint leading-relaxed">

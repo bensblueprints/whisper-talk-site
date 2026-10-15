@@ -63,7 +63,7 @@ export default function AppSumoPage() {
             Here's how to get started in under two minutes.
           </p>
           <p className="text-paper-faint font-mono text-[12px] mb-12">
-            Regular price: $49 one-time · AppSumo price: <span className="text-ember">$29 lifetime</span>
+            Regular price: $99 one-time · AppSumo price: <span className="text-ember">$29 lifetime</span>
           </p>
 
           {/* Steps */}

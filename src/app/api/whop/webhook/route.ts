@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { db, schema } from '@/lib/db';
 import { eq, and } from 'drizzle-orm';
 import { createHmac, timingSafeEqual } from 'node:crypto';
+import { createReseller, dashboardUrlFor } from '@/lib/reseller';
+import { sendResellerWelcomeEmail } from '@/lib/email';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -15,6 +17,11 @@ function getPaidPlanIds(): Set<string> {
 
 function getAddonPlanId(): string {
   return process.env.WHOP_ADDON_PLAN_ID || 'plan_fiK0F85A7ml2P';
+}
+
+// Reseller plan — one-time $720 ($997 retail). Buyers get a key-generation dashboard.
+function getResellerPlanId(): string {
+  return process.env.WHOP_RESELLER_PLAN_ID || 'plan_Y6cEJUbWTINsm';
 }
 
 function verifySignature(rawBody: string, header: string | null): boolean {
@@ -107,6 +114,31 @@ async function handleActivated(data: Record<string, unknown>) {
   const planId = String(plan.id ?? '');
   const amountCents = Math.round(Number(plan.price ?? data.checkout_price ?? 0) * 100);
 
+  if (planId === getResellerPlanId()) {
+    // Reseller purchase — create the reseller account and email the dashboard link
+    const { reseller, created } = await createReseller({
+      email,
+      name: String(user.name ?? user.username ?? '') || null,
+      externalId: membershipId,
+      amountCents,
+      currency: 'usd'
+    });
+    if (created) {
+      try {
+        await sendResellerWelcomeEmail({
+          to: reseller.email,
+          dashboardUrl: dashboardUrlFor(reseller.accessToken),
+          amountCents: reseller.amountCents,
+          currency: reseller.currency
+        });
+      } catch (err) {
+        console.error('Reseller welcome email failed (reseller still recorded):', err);
+      }
+      console.log(`Whop: reseller account created for ${email}`);
+    }
+    return;
+  }
+
   if (getPaidPlanIds().has(planId)) {
     // Main lifetime purchase — issue key directly
     await db.insert(schema.licenses).values({
@@ -178,6 +210,12 @@ async function handleActivated(data: Record<string, unknown>) {
 async function handleDeactivated(data: Record<string, unknown>) {
   const membershipId = String(data.id ?? '');
   if (!membershipId) return;
+
+  // Deactivated reseller (refund/chargeback): block key generation; sold keys stay active.
+  await db
+    .update(schema.resellers)
+    .set({ status: 'refunded', refundedAt: new Date() })
+    .where(eq(schema.resellers.externalId, membershipId));
 
   await db
     .update(schema.licenses)

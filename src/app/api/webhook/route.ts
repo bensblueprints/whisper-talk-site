@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server';
 import { stripe, webhookSecret } from '@/lib/stripe';
 import { db, schema } from '@/lib/db';
 import { generateLicenseKey } from '@/lib/license';
-import { sendLicenseEmail, sendResellerWelcomeEmail } from '@/lib/email';
-import { RESELLER_PRODUCT, createReseller, dashboardUrlFor, resellerPriceCents } from '@/lib/reseller';
+import { sendLicenseEmail } from '@/lib/email';
 import { eq } from 'drizzle-orm';
 import type Stripe from 'stripe';
 
@@ -48,10 +47,6 @@ export async function POST(req: Request) {
 async function handleCompleted(session: Stripe.Checkout.Session) {
   if (session.payment_status !== 'paid') return;
   if (!stripe) return;
-
-  if (session.metadata?.product === RESELLER_PRODUCT) {
-    return handleResellerCompleted(session);
-  }
 
   const existing = await db
     .select()
@@ -129,46 +124,9 @@ async function handleCompleted(session: Stripe.Checkout.Session) {
   }
 }
 
-async function handleResellerCompleted(session: Stripe.Checkout.Session) {
-  const email = session.customer_details?.email || session.customer_email;
-  if (!email) throw new Error('No customer email on reseller session');
-
-  const customerId =
-    typeof session.customer === 'string' ? session.customer : session.customer?.id ?? null;
-  const piId =
-    typeof session.payment_intent === 'string' ? session.payment_intent : null;
-
-  const reseller = await createReseller({
-    email,
-    name: session.customer_details?.name ?? null,
-    stripeCustomerId: customerId,
-    stripeSessionId: session.id,
-    stripePaymentIntentId: piId,
-    amountCents: session.amount_total ?? resellerPriceCents(),
-    currency: session.currency || 'usd'
-  });
-
-  try {
-    await sendResellerWelcomeEmail({
-      to: reseller.email,
-      dashboardUrl: dashboardUrlFor(reseller.accessToken),
-      amountCents: reseller.amountCents,
-      currency: reseller.currency
-    });
-  } catch (err) {
-    console.error('Reseller welcome email failed (reseller still recorded):', err);
-  }
-}
-
 async function handleRefunded(charge: Stripe.Charge) {
   const piId = typeof charge.payment_intent === 'string' ? charge.payment_intent : charge.payment_intent?.id;
   if (!piId) return;
-
-  // Refunded reseller fee: block further key generation; keys already sold stay active.
-  await db
-    .update(schema.resellers)
-    .set({ status: 'refunded', refundedAt: new Date() })
-    .where(eq(schema.resellers.stripePaymentIntentId, piId));
 
   const rows = await db
     .select()

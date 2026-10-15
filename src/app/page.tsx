@@ -10,6 +10,7 @@ import { Comparison } from '@/components/Comparison';
 import { Pricing } from '@/components/Pricing';
 import { FAQ } from '@/components/FAQ';
 import { Footer } from '@/components/Footer';
+import { saleActive, appPriceCents, APP_RETAIL_CENTS, fmtCents } from '@/lib/sale';
 
 export default function Page() {
   return (
@@ -45,6 +46,8 @@ function BackgroundGrid() {
 }
 
 function Hero() {
+  const sale = saleActive();
+
   return (
     <section className="relative px-6 lg:px-10 pt-12 pb-24 lg:pt-20 lg:pb-32 z-10">
       <div className="mx-auto max-w-[1280px]">
@@ -72,8 +75,19 @@ function Hero() {
             >
               A small, fast dictation app that turns rough speech into clean text inside whatever
               you're typing in. Hold a key, talk, release. Cleanup happens before the words land.
-              Start free — <em className="not-italic text-paper">2,000 words a month</em> at no cost.
-              Upgrade once for <em className="not-italic text-paper">$49</em> and get unlimited words, forever.
+              Start free — <em className="not-italic text-paper">2,000 words a month</em> at no cost.{' '}
+              {sale ? (
+                <>
+                  Upgrade once for <em className="not-italic text-paper">{fmtCents(appPriceCents())}</em>{' '}
+                  in our Halloween deal — the <em className="not-italic text-ember">talk of the town</em>{' '}
+                  until Nov 1 (retail {fmtCents(APP_RETAIL_CENTS)}) — and get unlimited words, forever.
+                </>
+              ) : (
+                <>
+                  Upgrade once for <em className="not-italic text-paper">{fmtCents(appPriceCents())}</em>{' '}
+                  and get unlimited words, forever.
+                </>
+              )}
             </p>
 
             <div

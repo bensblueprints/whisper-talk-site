@@ -36,9 +36,7 @@ export const resellers = pgTable(
     id: text('id').primaryKey(),
     email: text('email').notNull(),
     name: text('name'),
-    stripeCustomerId: text('stripe_customer_id'),
-    stripeSessionId: text('stripe_session_id'),
-    stripePaymentIntentId: text('stripe_payment_intent_id'),
+    externalId: text('external_id'),
     amountCents: integer('amount_cents').notNull(),
     currency: text('currency').notNull().default('usd'),
     accessToken: text('access_token').notNull().unique(),
@@ -48,8 +46,7 @@ export const resellers = pgTable(
   },
   (t) => ({
     emailIdx: index('resellers_email_idx').on(t.email),
-    sessionIdx: index('resellers_session_idx').on(t.stripeSessionId),
-    piIdx: index('resellers_pi_idx').on(t.stripePaymentIntentId)
+    externalIdx: index('resellers_external_id_idx').on(t.externalId)
   })
 );
 

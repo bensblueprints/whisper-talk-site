@@ -3,11 +3,6 @@ import { db, schema } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 import type { Reseller } from '@/db/schema';
 
-import { resellerPriceCents } from '@/lib/sale';
-
-export const RESELLER_PRODUCT = 'wispertalk-reseller';
-export { resellerPriceCents };
-
 export function newAccessToken(): string {
   return randomBytes(24).toString('base64url');
 }
@@ -27,11 +22,11 @@ export async function resellerByToken(token: string): Promise<Reseller | null> {
   return rows[0] ?? null;
 }
 
-export async function resellerBySession(sessionId: string): Promise<Reseller | null> {
+export async function resellerByExternalId(externalId: string): Promise<Reseller | null> {
   const rows = await db
     .select()
     .from(schema.resellers)
-    .where(eq(schema.resellers.stripeSessionId, sessionId))
+    .where(eq(schema.resellers.externalId, externalId))
     .limit(1);
   return rows[0] ?? null;
 }
@@ -39,36 +34,29 @@ export async function resellerBySession(sessionId: string): Promise<Reseller | n
 export async function createReseller({
   email,
   name,
-  stripeCustomerId,
-  stripeSessionId,
-  stripePaymentIntentId,
+  externalId,
   amountCents,
   currency
 }: {
   email: string;
   name?: string | null;
-  stripeCustomerId?: string | null;
-  stripeSessionId: string;
-  stripePaymentIntentId?: string | null;
+  externalId: string;
   amountCents: number;
   currency: string;
-}): Promise<Reseller> {
-  const existing = await resellerBySession(stripeSessionId);
-  if (existing) return existing;
+}): Promise<{ reseller: Reseller; created: boolean }> {
+  const existing = await resellerByExternalId(externalId);
+  if (existing) return { reseller: existing, created: false };
 
-  const token = newAccessToken();
   const row = {
     id: randomUUID(),
     email,
     name: name ?? null,
-    stripeCustomerId: stripeCustomerId ?? null,
-    stripeSessionId,
-    stripePaymentIntentId: stripePaymentIntentId ?? null,
+    externalId,
     amountCents,
     currency,
-    accessToken: token,
+    accessToken: newAccessToken(),
     status: 'active'
   };
   await db.insert(schema.resellers).values(row);
-  return row as Reseller;
+  return { reseller: row as Reseller, created: true };
 }

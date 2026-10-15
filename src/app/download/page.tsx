@@ -21,7 +21,7 @@ export default function DownloadPage() {
           </h1>
 
           <p className="text-paper-mute text-[15.5px] leading-relaxed max-w-xl mb-12">
-            Same app, same $49 lifetime license, two operating systems. Start free — 2,000 words/month. Pick your platform below.
+            Same app, same lifetime license ($99 — $49.99 until Nov 1), two operating systems. Start free — 2,000 words/month. Pick your platform below.
           </p>
 
           {/* Windows */}

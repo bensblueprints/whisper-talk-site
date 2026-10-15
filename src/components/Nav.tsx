@@ -1,6 +1,11 @@
+'use client';
+
 import Link from 'next/link';
+import { appPriceCents, saleActive, fmtCents } from '@/lib/sale';
 
 export function Nav() {
+  const price = fmtCents(appPriceCents());
+  const sale = saleActive();
   return (
     <header className="relative z-30 px-6 lg:px-10 pt-6 pb-3">
       <div className="mx-auto max-w-[1280px] flex items-center justify-between">
@@ -34,7 +39,7 @@ export function Nav() {
             href="#pricing"
             className="font-mono text-[11px] uppercase-track text-ink bg-ember hover:bg-ember-soft px-4 py-2.5 rounded-md transition-colors"
           >
-            Buy — $49
+            Buy — {price}{sale ? ' sale' : ''}
           </Link>
         </nav>
       </div>

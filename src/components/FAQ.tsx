@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { appPriceCents, APP_RETAIL_CENTS, saleActive, fmtCents } from '@/lib/sale';
 
 const items = [
   {
@@ -12,8 +13,8 @@ const items = [
     a: 'License verification happens once a week, so brief offline periods are fine. Transcription itself uses Groq by default (cloud), but you can point the app at a local Ollama instance for fully offline dictation. The license check is the only thing that ever needs internet.'
   },
   {
-    q: 'Why pay $49 if FreeFlow is free on Mac?',
-    a: 'FreeFlow on Mac is excellent and we recommend it. WisperTalk runs on both Windows and macOS — the cross-platform work required from-scratch engineering for each platform. The $49 covers continued development, license infrastructure, and a real human reading your support email. You also get 2,000 free words a month before spending anything. (Compared to two years of any dictation subscription, you still come out far ahead.)'
+    q: 'PRICE_Q',
+    a: 'PRICE_A'
   },
   {
     q: 'What about my data?',
@@ -31,6 +32,19 @@ const items = [
 
 export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
+  const price = fmtCents(appPriceCents());
+  const faqItems = items.map((it) =>
+    it.q === 'PRICE_Q'
+      ? {
+          q: `Why pay ${price} if FreeFlow is free on Mac?`,
+          a: `FreeFlow on Mac is excellent and we recommend it. WisperTalk runs on both Windows and macOS — the cross-platform work required from-scratch engineering for each platform. The ${price} covers continued development, license infrastructure, and a real human reading your support email.${
+            saleActive()
+              ? ` (That's the Halloween price — retail is ${fmtCents(APP_RETAIL_CENTS)} after Nov 1.)`
+              : ''
+          } You also get 2,000 free words a month before spending anything. (Compared to two years of any dictation subscription, you still come out far ahead.)`
+        }
+      : it
+  );
 
   return (
     <section className="px-6 lg:px-10 py-24 lg:py-32 relative">
@@ -45,7 +59,7 @@ export function FAQ() {
         </h2>
 
         <div className="border-t border-paper-trace">
-          {items.map((it, i) => (
+          {faqItems.map((it, i) => (
             <div key={i} className="border-b border-paper-trace">
               <button
                 onClick={() => setOpen(open === i ? null : i)}

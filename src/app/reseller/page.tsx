@@ -5,7 +5,10 @@ import { HalloweenCountdown } from './halloween-countdown';
 import {
   saleActive,
   resellerPriceCents,
-  RESELLER_RETAIL_CENTS
+  appPriceCents,
+  APP_RETAIL_CENTS,
+  RESELLER_RETAIL_CENTS,
+  fmtCents
 } from '@/lib/sale';
 
 export const metadata = {
@@ -30,10 +33,11 @@ const terms = [
 
 export default function ResellerPage() {
   const sale = saleActive();
-  const price = resellerPriceCents() / 100;
-  const retail = RESELLER_RETAIL_CENTS / 100;
-  // Break-even selling keys at the $49 retail price
-  const breakEven = Math.ceil(price / 49);
+  const price = fmtCents(resellerPriceCents());
+  const retail = fmtCents(RESELLER_RETAIL_CENTS);
+  const keyPrice = fmtCents(appPriceCents());
+  // Break-even selling keys at the current retail price
+  const breakEven = Math.ceil(resellerPriceCents() / appPriceCents());
 
   return (
     <main className="min-h-screen grain">
@@ -54,14 +58,14 @@ export default function ResellerPage() {
           <p className="text-paper-mute text-[17px] leading-relaxed max-w-xl mb-8 text-pretty">
             {sale ? (
               <>
-                Our Halloween deal is the <em className="text-ember not-italic">tail of the talk</em>:{' '}
-                <span className="text-paper">${price}</span> until Nov 1 (normally ${retail}) makes you an
+                Our Halloween deal is the <em className="text-ember not-italic">talk of the town</em>:{' '}
+                <span className="text-paper">{price}</span> until Nov 1 (normally {retail}) makes you an
                 authorized reseller. Generate unlimited lifetime license keys from your own dashboard and
                 sell them at any price you want. No revenue share. No per-key fees. No subscription.
               </>
             ) : (
               <>
-                One payment of ${retail} makes you an authorized reseller. Generate unlimited lifetime
+                One payment of {retail} makes you an authorized reseller. Generate unlimited lifetime
                 license keys from your own dashboard and sell them at any price you want. No revenue
                 share. No per-key fees. No subscription.
               </>
@@ -77,7 +81,7 @@ export default function ResellerPage() {
           <div className="flex flex-wrap items-center gap-6 mb-6">
             <ResellerBuyButton />
             <span className="font-mono text-[11px] text-paper-faint leading-relaxed max-w-[240px]">
-              Stripe checkout · dashboard link delivered instantly by email
+              Whop checkout · dashboard link delivered by email after payment
             </span>
           </div>
         </div>
@@ -114,7 +118,7 @@ export default function ResellerPage() {
               <div>
                 <div className="font-display text-6xl lg:text-7xl text-ember leading-none mb-2">{breakEven}</div>
                 <div className="font-mono text-[11px] uppercase-track text-paper-mute">
-                  sales at $49 to break even{sale ? ' at the Halloween price' : ''}
+                  sales at {keyPrice} to break even
                 </div>
               </div>
               <div>
@@ -127,9 +131,10 @@ export default function ResellerPage() {
               </div>
             </div>
             <p className="text-paper-mute text-[14px] leading-relaxed mt-8 max-w-2xl">
-              Retail price is $49 per lifetime license — sell at that and {breakEven} sales covers
-              the reseller fee. Sale {breakEven + 1} onward is pure margin. Price it higher, bundle it,
-              use it as a lead magnet for your own products — it's your call.
+              Retail price is {fmtCents(APP_RETAIL_CENTS)} per lifetime license ({keyPrice} until
+              Nov 1 in the Halloween deal) — sell at that and {breakEven} sales covers the reseller
+              fee. Sale {breakEven + 1} onward is pure margin. Price it higher, bundle it, use it as
+              a lead magnet for your own products — it's your call.
             </p>
           </div>
         </div>
@@ -159,12 +164,12 @@ export default function ResellerPage() {
             <h2 className="font-display text-4xl sm:text-6xl leading-[0.95] tracking-tight mb-4">
               {sale ? (
                 <>
-                  <em className="text-ember">${price}</em> until Nov 1.{' '}
-                  <span className="line-through opacity-50">${retail}</span> after.
+                  <em className="text-ember">{price}</em> until Nov 1.{' '}
+                  <span className="line-through opacity-50">{retail}</span> after.
                 </>
               ) : (
                 <>
-                  <em className="text-ember">${retail}</em> once. Unlimited keys forever.
+                  <em className="text-ember">{retail}</em> once. Unlimited keys forever.
                 </>
               )}
             </h2>
