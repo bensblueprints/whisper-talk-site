@@ -12,6 +12,9 @@ FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# next build only needs DATABASE_URL to exist at import time; the value is never dialed
+ARG DATABASE_URL=postgres://build:build@localhost:5432/build
+ENV DATABASE_URL=${DATABASE_URL}
 RUN npm run build
 
 FROM base AS runner
