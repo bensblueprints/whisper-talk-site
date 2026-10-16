@@ -41,7 +41,7 @@ export function FAQ() {
             saleActive()
               ? ` (That's the Halloween price — retail is ${fmtCents(APP_RETAIL_CENTS)} after Dec 1.)`
               : ''
-          } You also get 2,000 free words a month before spending anything. (Compared to two years of any dictation subscription, you still come out far ahead.)`
+          } (Compared to two years of any dictation subscription, you still come out far ahead.)`
         }
       : it
   );

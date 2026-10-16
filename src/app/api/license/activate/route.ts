@@ -218,8 +218,12 @@ async function activateWhopUnknown(
   }
 
   const paidPlanIds = new Set((process.env.WHOP_PAID_PLAN_IDS || 'plan_cM14gKwLOrelj,plan_Oh4HMckTmxXcE').split(',').map(s => s.trim()));
-  const amountCents = paidPlanIds.has(planId) ? 4999 : 0;
-  const tier = amountCents === 0 ? 'free' : 'paid';
+  // Free tier retired — only paid plans may activate
+  if (!paidPlanIds.has(planId)) {
+    return NextResponse.json({ ok: false, error: 'invalid_key' }, { status: 404 });
+  }
+  const amountCents = 4999;
+  const tier = 'paid';
 
   // Check if this membership exists under an old key and update, otherwise insert
   const existing = await db.select().from(schema.licenses)

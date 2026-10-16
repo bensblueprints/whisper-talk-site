@@ -26,10 +26,9 @@ export function Pricing() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
           <div className="lg:col-span-7">
             <h2 className="font-display text-5xl sm:text-7xl lg:text-8xl leading-[0.9] tracking-tight text-balance mb-6">
-              Start free. <em className="text-ember">Upgrade once.</em>
+              Pay once. <em className="text-ember">Yours forever.</em>
             </h2>
             <p className="text-paper-mute text-[16px] leading-relaxed max-w-lg mb-6 text-pretty">
-              Download and get 2,000 free words every month — no credit card required. Ready for unlimited?{' '}
               {sale ? (
                 <>
                   <span className="text-paper">{price}</span> in our Halloween deal — the{' '}
@@ -49,21 +48,6 @@ export function Pricing() {
             </div>
 
             <div className="grid grid-cols-2 gap-3 mb-8 max-w-[440px]">
-              <div className="rounded-xl border border-paper-trace bg-ink-2/40 p-4">
-                <div className="font-mono text-[10px] uppercase-track text-paper-faint mb-2">Free</div>
-                <div className="font-display text-[32px] text-paper leading-none mb-1">$0</div>
-                <div className="font-mono text-[11px] text-paper-faint mb-4">always</div>
-                <ul className="space-y-2.5">
-                  <li className="flex items-start gap-2">
-                    <span className="block w-1 h-1 rounded-full bg-paper-faint mt-2 flex-shrink-0" />
-                    <span className="text-paper-mute text-[12.5px]">2,000 words / month</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <span className="block w-1 h-1 rounded-full bg-paper-faint mt-2 flex-shrink-0" />
-                    <span className="text-paper-mute text-[12.5px]">No credit card needed</span>
-                  </li>
-                </ul>
-              </div>
               <div className="rounded-xl border border-ember/40 bg-ember/5 p-4 relative">
                 <div className="absolute top-2 right-2 font-mono text-[9px] uppercase-track text-ember bg-ember/10 px-2 py-0.5 rounded-full">
                   {sale ? 'Halloween deal' : 'Best value'}

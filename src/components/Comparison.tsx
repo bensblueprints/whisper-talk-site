@@ -30,10 +30,10 @@ const competitors = [
     price: fmtCents(appPriceCents()),
     period: 'once',
     note: saleActive()
-      ? 'Windows + Mac · free trial · Halloween deal ends Dec 1'
-      : 'Windows + Mac · free trial · pay once',
+      ? 'Windows + Mac · Halloween deal ends Dec 1'
+      : 'Windows + Mac · pay once',
     locked: [],
-    perks: ['free 2,000 words/month', 'no subscription', 'one device at a time'],
+    perks: ['unlimited words', 'no subscription', 'one device at a time'],
     highlight: true
   }
 ];

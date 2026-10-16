@@ -187,19 +187,10 @@ async function handleActivated(data: Record<string, unknown>) {
     return;
   }
 
-  // Free tier — store the key so activation works in the app (word limit enforced client-side)
+  // Free tier removed — free-plan memberships no longer get license keys.
   const freePlanId = process.env.WHOP_FREE_PLAN_ID || 'plan_WcXGMgVYoqMEn';
   if (planId === freePlanId) {
-    await db.insert(schema.licenses).values({
-      key: licenseKey,
-      email,
-      amountCents: 0,
-      currency: 'usd',
-      status: 'active',
-      source: 'whop',
-      externalId: membershipId
-    });
-    console.log(`Whop: issued free trial key for ${email}`);
+    console.log(`Whop webhook: ignoring free plan ${planId} on membership ${membershipId} (free tier retired)`);
     return;
   }
 
