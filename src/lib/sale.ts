@@ -1,5 +1,5 @@
-// Halloween sale ends when Nov 1 2026 begins, Pacific time (still PDT, -07:00).
-export const SALE_ENDS = new Date('2026-11-01T00:00:00-07:00').getTime();
+// Halloween sale extended — ends when Dec 1 2026 begins, Pacific time (PST, -08:00).
+export const SALE_ENDS = new Date('2026-12-01T00:00:00-08:00').getTime();
 
 export const APP_RETAIL_CENTS = 9900;
 export const APP_SALE_CENTS = 4999;

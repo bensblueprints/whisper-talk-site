@@ -23,7 +23,7 @@ export function PricingBuy() {
         </span>
         <span className="block w-px h-6 bg-ink/20" />
         <span className="font-mono text-[12px] uppercase-track">
-          {sale ? 'Halloween deal — ends Nov 1 →' : 'Buy lifetime →'}
+          {sale ? 'Halloween deal — ends Dec 1 →' : 'Buy lifetime →'}
         </span>
       </a>
 

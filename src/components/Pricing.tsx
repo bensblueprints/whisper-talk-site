@@ -33,7 +33,7 @@ export function Pricing() {
               {sale ? (
                 <>
                   <span className="text-paper">{price}</span> in our Halloween deal — the{' '}
-                  <em className="text-ember not-italic">talk of the town</em> until Nov 1, then back
+                  <em className="text-ember not-italic">talk of the town</em> until Dec 1, then back
                   to <span className="text-paper">{fmtCents(APP_RETAIL_CENTS)}</span>. Pay once — no
                   subscription, no seat math, every future update included.
                 </>
@@ -78,7 +78,7 @@ export function Pricing() {
                   {price}
                 </div>
                 <div className="font-mono text-[11px] text-paper-faint mb-4">
-                  {sale ? 'until Nov 1' : 'pay once'}
+                  {sale ? 'until Dec 1' : 'pay once'}
                 </div>
                 <ul className="space-y-2.5">
                   <li className="flex items-start gap-2">

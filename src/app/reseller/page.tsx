@@ -14,7 +14,7 @@ import {
 export const metadata = {
   title: 'Reseller program — WisperTalk',
   description:
-    'One-time reseller license. Generate unlimited WisperTalk lifetime keys, sell at any price, keep every dollar. Halloween deal: $720 until Nov 1 (retail $997).'
+    'One-time reseller license. Generate unlimited WisperTalk lifetime keys, sell at any price, keep every dollar. Halloween deal: $720 until Dec 1 (retail $997).'
 };
 
 const steps = [
@@ -59,7 +59,7 @@ export default function ResellerPage() {
             {sale ? (
               <>
                 Our Halloween deal is the <em className="text-ember not-italic">talk of the town</em>:{' '}
-                <span className="text-paper">{price}</span> until Nov 1 (normally {retail}) makes you an
+                <span className="text-paper">{price}</span> until Dec 1 (normally {retail}) makes you an
                 authorized reseller. Generate unlimited lifetime license keys from your own dashboard and
                 sell them at any price you want. No revenue share. No per-key fees. No subscription.
               </>
@@ -132,7 +132,7 @@ export default function ResellerPage() {
             </div>
             <p className="text-paper-mute text-[14px] leading-relaxed mt-8 max-w-2xl">
               Retail price is {fmtCents(APP_RETAIL_CENTS)} per lifetime license ({keyPrice} until
-              Nov 1 in the Halloween deal) — sell at that and {breakEven} sales covers the reseller
+              Dec 1 in the Halloween deal) — sell at that and {breakEven} sales covers the reseller
               fee. Sale {breakEven + 1} onward is pure margin. Price it higher, bundle it, use it as
               a lead magnet for your own products — it's your call.
             </p>
@@ -164,7 +164,7 @@ export default function ResellerPage() {
             <h2 className="font-display text-4xl sm:text-6xl leading-[0.95] tracking-tight mb-4">
               {sale ? (
                 <>
-                  <em className="text-ember">{price}</em> until Nov 1.{' '}
+                  <em className="text-ember">{price}</em> until Dec 1.{' '}
                   <span className="line-through opacity-50">{retail}</span> after.
                 </>
               ) : (

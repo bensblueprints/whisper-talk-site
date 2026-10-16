@@ -80,7 +80,7 @@ function Hero() {
                 <>
                   Upgrade once for <em className="not-italic text-paper">{fmtCents(appPriceCents())}</em>{' '}
                   in our Halloween deal — the <em className="not-italic text-ember">talk of the town</em>{' '}
-                  until Nov 1 (retail {fmtCents(APP_RETAIL_CENTS)}) — and get unlimited words, forever.
+                  until Dec 1 (retail {fmtCents(APP_RETAIL_CENTS)}) — and get unlimited words, forever.
                 </>
               ) : (
                 <>

@@ -39,7 +39,7 @@ export function FAQ() {
           q: `Why pay ${price} if FreeFlow is free on Mac?`,
           a: `FreeFlow on Mac is excellent and we recommend it. WisperTalk runs on both Windows and macOS — the cross-platform work required from-scratch engineering for each platform. The ${price} covers continued development, license infrastructure, and a real human reading your support email.${
             saleActive()
-              ? ` (That's the Halloween price — retail is ${fmtCents(APP_RETAIL_CENTS)} after Nov 1.)`
+              ? ` (That's the Halloween price — retail is ${fmtCents(APP_RETAIL_CENTS)} after Dec 1.)`
               : ''
           } You also get 2,000 free words a month before spending anything. (Compared to two years of any dictation subscription, you still come out far ahead.)`
         }
